@@ -1,0 +1,67 @@
+<div id="combined-dashboard" style="margin: 20px;">
+    
+    <!-- Combined Total Section -->
+    <div class="combined-total-box">
+        <div class="total-label">💼 الإجمالي الكلي (الخزينة + البنوك + الحسابات الأخرى)</div>
+        <div id="combined-total" class="total-amount">⏳ جاري التحميل...</div>
+        <button id="refresh-all-btn" class="refresh-button">🔄 تحديث جميع الأرصدة</button>
+    </div>
+
+    <!-- Three Columns Layout -->
+    <div class="dashboard-grid">
+        
+        <!-- Column 1: Treasury -->
+        <div class="column-box">
+            <div class="treasury-box">
+                <div class="box-header">💰 الخزينة</div>
+                
+                <div class="summary-box">
+                    <div class="summary-label">الإجمالي</div>
+                    <div id="treasury-total" class="summary-amount">⏳</div>
+                </div>
+                
+                <div id="treasury-breakdown" class="breakdown-container">
+                    <div style="text-align: center; opacity: 0.7; padding: 20px;">جاري التحميل...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column 2: Banks -->
+        <div class="column-box">
+            <div class="banks-box">
+                <div class="box-header">🏦 البنوك</div>
+                
+                <div class="summary-box">
+                    <div class="summary-label">إجمالي البنوك</div>
+                    <div id="banks-total" class="summary-amount">⏳</div>
+                </div>
+                
+                <div id="banks-container" class="banks-scroll-container">
+                    <div style="text-align: center; opacity: 0.7; padding: 20px;">جاري التحميل...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column 3: Other Accounts -->
+        <div class="column-box">
+            <div class="other-box">
+                <div class="box-header">📊 حسابات أخرى</div>
+                
+                <div class="summary-box">
+                    <div class="summary-label">الإجمالي</div>
+                    <div id="other-total" class="summary-amount">⏳</div>
+                </div>
+                
+                <div id="other-breakdown" class="breakdown-container">
+                    <div style="text-align: center; opacity: 0.7; padding: 20px;">جاري التحميل...</div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Date Info -->
+    <div id="date-info" class="date-info-text">
+        Loading...
+    </div>
+</div>

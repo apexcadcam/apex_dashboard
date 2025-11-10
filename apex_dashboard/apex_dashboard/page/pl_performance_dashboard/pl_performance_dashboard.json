@@ -1,0 +1,25 @@
+{
+  "creation": "2025-11-09 00:00:00.000000",
+  "docstatus": 0,
+  "doctype": "Page",
+  "idx": 0,
+  "modified": "2025-11-09 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Apex Dashboard",
+  "name": "pl-performance-dashboard",
+  "owner": "Administrator",
+  "page_name": "P&L Performance Dashboard",
+  "roles": [
+    {
+      "role": "System Manager"
+    },
+    {
+      "role": "Accounts Manager"
+    },
+    {
+      "role": "Accounts User"
+    }
+  ],
+  "standard": "Yes",
+  "title": "P&L Performance Dashboard"
+}

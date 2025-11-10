@@ -1,0 +1,25 @@
+{
+  "creation": "2025-11-09 00:00:00.000000",
+  "docstatus": 0,
+  "doctype": "Page",
+  "idx": 0,
+  "modified": "2025-11-09 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Apex Dashboard",
+  "name": "equity-profit-dashboard",
+  "owner": "Administrator",
+  "page_name": "Equity & Profit Dashboard",
+  "roles": [
+    {
+      "role": "System Manager"
+    },
+    {
+      "role": "Accounts Manager"
+    },
+    {
+      "role": "Accounts User"
+    }
+  ],
+  "standard": "Yes",
+  "title": "Equity & Profit Dashboard"
+}

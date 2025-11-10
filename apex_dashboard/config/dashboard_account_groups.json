@@ -1,0 +1,88 @@
+{
+	"executive_control_center": {
+		"kpis": {
+			"total_cash": ["120101001 - HQ Treasury - EGP - AP", "120101002 - HQ Treasury - USD - AP", "120101003 - HQ Treasury - EUR - AP", "120101004 - HQ Treasury - SAR - AP", "1202001001 - AAIB - EGP - AP", "1202001002 - AAIB - USD - AP", "1202001003 - AAIB - EUR - AP", "1202002001 - FISAL - EGP - AP", "1202002002 - FISAL - USD - AP", "1202002003 - FISAL - EUR - AP", "1202003001 - CIB - EGP - AP", "1202003002 - CIB - USD - AP", "1202003003 - CIB - EUR - AP", "1202003004 - CIB - CPS - EGP - AP"],
+			"net_working_capital": {
+				"assets": ["12030010101 - Customers - EGP - AP", "12030010102 - Customers - USD - AP", "12030010103 - Customers - EUR - AP", "1203002001 - Notes Receivable - EGP - AP", "1203002002 - Notes Receivable - USD - AP", "1203002003 - Notes Receivable - EUR - AP", "1203003001 - Outstanding Cheques - EGP - AP", "1203003002 - Outstanding Cheques - USD - AP", "1203003003 - Outstanding Cheques - EUR - AP"],
+				"liabilities": ["22010010101 - Suppliers - EGP - AP", "22010010102 - Suppliers - USD - AP", "22010010103 - Suppliers - EUR - AP", "2201002001 - Notes Payable - EGP - AP", "2201002002 - Notes Payable - USD - AP", "2201002003 - Notes Payable - EUR - AP", "2201003001 - Value Added Tax Authority - AP", "2201003002 - Income Tax Authority - AP", "2201003003 - Social Insurance Authority - AP", "2201003004 - Income Earnings Tax Authority - AP"]
+			},
+			"net_profit": ["34 - Net Income Summary - AP", "35 - Retained Earnings - AP"],
+			"critical_commitments": ["22010010401 - Employees Payroll Payable - AP", "22010010402 - Employees Commission Payable - AP", "2201003001 - Value Added Tax Authority - AP", "2203001 - Accrued Expenses - AP", "2203002 - Deferred Revenue - AP"]
+		}
+	},
+	"cash_liquidity_dashboard": {
+		"treasury": {
+			"name": "HQ Treasury",
+			"accounts": ["120101001 - HQ Treasury - EGP - AP", "120101002 - HQ Treasury - USD - AP", "120101003 - HQ Treasury - EUR - AP", "120101004 - HQ Treasury - SAR - AP"]
+		},
+		"banks": {
+			"AAIB": ["1202001001 - AAIB - EGP - AP", "1202001002 - AAIB - USD - AP", "1202001003 - AAIB - EUR - AP"],
+			"FISAL": ["1202002001 - FISAL - EGP - AP", "1202002002 - FISAL - USD - AP", "1202002003 - FISAL - EUR - AP"],
+			"CIB": ["1202003001 - CIB - EGP - AP", "1202003002 - CIB - USD - AP", "1202003003 - CIB - EUR - AP", "1202003004 - CIB - CPS - EGP - AP"],
+			"Egypt Post": ["1202004001 - Visa Yalla - AP"]
+		},
+		"credit_cards": {
+			"CIB": ["1202003005001 - CIB - EGP - Credit Cards - MG - AP", "1202003005002 - CIB - EGP - Credit Cards - SS - AP"]
+		},
+		"facilities": {
+			"overdrafts": ["2203005001 - CIB - Credit Overdraft - MG - AP", "2203005002 - CIB - Credit Overdraft - SS - AP"],
+			"loans": []
+		}
+	},
+	"receivables_dashboard": {
+		"customers": ["12030010101 - Customers - EGP - AP", "12030010102 - Customers - USD - AP", "12030010103 - Customers - EUR - AP"],
+		"notes_receivable": ["1203002001 - Notes Receivable - EGP - AP", "1203002002 - Notes Receivable - USD - AP", "1203002003 - Notes Receivable - EUR - AP"],
+		"outstanding_cheques": ["1203003001 - Outstanding Cheques - EGP - AP", "1203003002 - Outstanding Cheques - USD - AP", "1203003003 - Outstanding Cheques - EUR - AP"]
+	},
+	"liabilities_dashboard": {
+		"suppliers": ["22010010101 - Suppliers - EGP - AP", "22010010102 - Suppliers - USD - AP", "22010010103 - Suppliers - EUR - AP"],
+		"shipping": ["22010010201 - Shipping Companies - EGP - AP", "22010010202 - Shipping Companies - USD - AP", "22010010203 - Shipping Companies - EUR - AP"],
+		"customs": ["22010010301 - Customs Clearance Companies - EGP - AP", "22010010302 - Customs Clearance Companies - USD - AP", "22010010303 - Customs Clearance Companies - EUR - AP"],
+		"employees": ["22010010401 - Employees Payroll Payable - AP", "22010010402 - Employees Commission Payable - AP"],
+        "partners": ["22010010501 - Sales Partners Payable - EGP - AP"],
+		"other_creditors": ["22010010601 - Other Creditors - EGP - AP"],
+		"notes_payable": ["2201002001 - Notes Payable - EGP - AP", "2201002002 - Notes Payable - USD - AP", "2201002003 - Notes Payable - EUR - AP"],
+		"taxes": ["2201003001 - Value Added Tax Authority - AP", "2201003002 - Income Tax Authority - AP", "2201003003 - Social Insurance Authority - AP", "2201003004 - Income Earnings Tax Authority - AP", "2204001 - VAT 14 Liabilities - AP", "2204002 - Tax Withholding - Purchases - AP", "2205001 - Zakaa Liability - AP"],
+		"stock_liabilities": ["2202001 - Stock Received But Not Billed - AP", "2202002 - Asset Received But Not Billed - AP"],
+		"credit_balances": ["2203001 - Accrued Expenses - AP", "2203002 - Deferred Revenue - AP", "2203003 - Bank Credit Interest - AP", "2203004 - Refundable Deposits - ( Liabilities ) - AP"],
+		"overdrafts": ["2203005001 - CIB - Credit Overdraft - MG - AP", "2203005002 - CIB - Credit Overdraft - SS - AP"]
+	},
+	"operations_assets_dashboard": {
+		"inventory": ["1204001001 - HQ Warehouse - AP", "1204001002 - Consumables Warehouse - AP", "1204001003 - Work in Process Inventory - AP"],
+		"stock_in_transit": ["2202001 - Stock Received But Not Billed - AP"],
+		"asset_in_transit": ["2202002 - Asset Received But Not Billed - AP"],
+		"consumables": ["1204001002 - Consumables Warehouse - AP"],
+		"other_current_assets": ["1205001 - Employee Custody - AP", "1205002 - Refundable Withdrawals (Assets) - AP", "1205003 - Employee Cash Advances - AP", "1205004 - Consignment Goods For others - AP", "1208001 - Deferred Expenses - AP", "1208002 - Accrued Revenues - AP"]
+	},
+	"fixed_assets_dashboard": {
+		"furniture": ["1101001 - Furnitures and Fixtures - AP", "1101002 - ACDEP / Furniture and Fixtures - AP"],
+		"computers": ["1102001 - Computer Equipments - AP", "1102002 - ACDEP / Computer Equipments - AP"],
+		"electronics": ["1103001 - Electronic Equipments - AP", "1103002 - ACDEP / Electronic Equipments - AP"],
+		"maintenance_tools": ["1104001 - Maintenance Equipments / Tools - AP", "1104002 - ACDEP / Maintenance Equipments Tools - AP"],
+		"dental_machines": ["1105001 - Dental Equipments / Machines - AP", "1105002 - ACDEP / Dental Equipments Machines - AP"],
+		"software": ["1106001 - Softwares - AP", "1106002 - ACDEP / Softwares - AP"],
+		"buildings": ["1108001 - Buildings - AP", "1108002 - ACDEP / Buildings - AP"],
+		"cwip": ["1107 - Captial Work In Progress - AP"],
+		"depreciation_expense": ["5104001 - Depreciation Computer Equipments Expenses - AP", "5104002 - Depreciation Dental Equipments/Machines Expenses - AP", "5104003 - Depreciation Electronic Equipments Expenses - AP", "5104004 - Depreciation Furnitures and Fixtures Expenses - AP", "5104005 - Depreciation Maintenance Equipments/Tools Expenses - AP", "5104006 - Depreciation Softwares Expenses - AP", "5104007 - Depreciation Buildings Expenses - AP"]
+	},
+	"pl_performance_dashboard": {
+		"direct_income": ["4101 - Sales Revenues - AP", "4102 - Services Revenues - AP"],
+		"indirect_income": ["4201 - Taxes Revenues - AP", "4202 - Other Revenues - AP"],
+		"direct_expenses": ["5201 - Cost Of Goods Sold / (COGS) - AP"],
+		"indirect_expenses": ["5101 - Administrative Expenses - AP", "5102 - Operating Expenses - AP", "5103 - General Expenses - AP", "5104 - Depreciation Expenses - AP"]
+	},
+	"equity_profit_dashboard": {
+		"capital": ["3101 - Capital Stock (A. Mohamed Gaber) - AP", "3102 - Capital Stock (A. Alsaid Saied) - AP"],
+		"owner_equity": ["3201001 - Current Account (A.Mohamed Gaber) - AP", "3201002 - Cash Withdrawals (A.Mohamed Gaber) - AP", "3202001 - Current Account (A.Alsaid Said) - AP", "3302002 - Cash withdrawals (A.Alsaid Saied) - AP"],
+		"retained_earnings": ["35 - Retained Earnings - AP"],
+		"net_income": ["33 - Profits / Losses Year - AP", "34 - Net Income Summary - AP"]
+	},
+	"employee_custody_dashboard": {
+		"custody": ["1205001 - Employee Custody - AP"],
+		"refundable_withdrawals": ["1205002 - Refundable Withdrawals (Assets) - AP"],
+		"cash_advances": ["1205003 - Employee Cash Advances - AP"],
+		"consignment_goods": ["1205004 - Consignment Goods For others - AP"],
+		"payables": ["22010010401 - Employees Payroll Payable - AP", "22010010402 - Employees Commission Payable - AP"]
+	}
+}
+
