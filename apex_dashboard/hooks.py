@@ -25,7 +25,7 @@ app_license = "mit"
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/apex_dashboard/css/apex_dashboard.css"
+app_include_css = "/assets/apex_dashboard/css/glass_apple.css"
 # app_include_js = "/assets/apex_dashboard/js/apex_dashboard.js"
 
 # include js, css files in header of web template
@@ -136,13 +136,28 @@ before_uninstall = "apex_dashboard.install.before_uninstall"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+    "GL Entry": {
+        "on_submit": "apex_dashboard.cache_utils.clear_all_dashboard_caches",
+        "on_cancel": "apex_dashboard.cache_utils.clear_all_dashboard_caches"
+    },
+    "Payment Entry": {
+        "on_submit": "apex_dashboard.cache_utils.clear_all_dashboard_caches",
+        "on_cancel": "apex_dashboard.cache_utils.clear_all_dashboard_caches"
+    },
+    "Journal Entry": {
+        "on_submit": "apex_dashboard.cache_utils.clear_all_dashboard_caches",
+        "on_cancel": "apex_dashboard.cache_utils.clear_all_dashboard_caches"
+    },
+    "Sales Invoice": {
+        "on_submit": "apex_dashboard.cache_utils.clear_all_dashboard_caches",
+        "on_cancel": "apex_dashboard.cache_utils.clear_all_dashboard_caches"
+    },
+    "Purchase Invoice": {
+        "on_submit": "apex_dashboard.cache_utils.clear_all_dashboard_caches",
+        "on_cancel": "apex_dashboard.cache_utils.clear_all_dashboard_caches"
+    }
+}
 
 # Scheduled Tasks
 # ---------------

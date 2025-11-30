@@ -252,6 +252,21 @@ def _matches_keyword(name: str, account_name: str, keywords: tuple[str, ...]) ->
 
 
 def fetch_expense_accounts(company: Optional[str] = None) -> List[Dict]:
+	"""
+	Fetch all expense accounts with their dashboard configuration.
+	
+	Args:
+		company: Company name to filter accounts
+		
+	Returns:
+		List[Dict]: List of account dictionaries with fields:
+			- name, account_name, account_currency
+			- category (detected or manual)
+			- dashboard_sort_order
+			
+	Example:
+		accounts = fetch_expense_accounts("Apex Company")
+	"""
 	filters = {
 		"root_type": "Expense",
 		"is_group": 0,
@@ -267,14 +282,14 @@ def fetch_expense_accounts(company: Optional[str] = None) -> List[Dict]:
 		"parent_account",
 		"account_type",
 		"company",
-		"expense_dashboard_category",
-		"expense_dashboard_sort_order",
+		"dashboard_category",
+		"dashboard_sort_order",
 	]
 
 	accounts = frappe.get_all("Account", filters=filters, fields=fields, order_by="name asc")
 
 	for account in accounts:
-		manual_category = (account.get("expense_dashboard_category") or "").strip()
+		manual_category = (account.get("dashboard_category") or "").strip()
 		if manual_category == HIDDEN_CATEGORY:
 			account["category"] = HIDDEN_CATEGORY
 		elif manual_category:
@@ -282,8 +297,8 @@ def fetch_expense_accounts(company: Optional[str] = None) -> List[Dict]:
 		else:
 			account["category"] = detect_category(account)
 
-		if account.get("expense_dashboard_sort_order") is None:
-			account["expense_dashboard_sort_order"] = 0
+		if account.get("dashboard_sort_order") is None:
+			account["dashboard_sort_order"] = 0
 
 	return accounts
 
@@ -334,6 +349,32 @@ def get_expense_dashboard_data(
 	to_date: Optional[str] = None,
 	compare_to_previous: bool = False,
 ) -> Dict:
+	"""
+	Get expense dashboard data with categorization and comparison.
+	
+	Args:
+		date: Reference date (default: today)
+		company: Company name
+		include_zero: Include accounts with zero balance
+		period: Time period (monthly, yearly, custom, etc.)
+		from_date: Start date for custom period
+		to_date: End date for custom period
+		compare_to_previous: Enable comparison with previous period
+		
+	Returns:
+		Dict: Dashboard data containing:
+			- period: Period details
+			- grand_total: Total expenses
+			- categories: List of expense categories with totals
+			- comparison: Comparison data (if enabled)
+			
+	Example:
+		data = get_expense_dashboard_data(
+			company="Apex Company",
+			period="This Month",
+			compare_to_previous=True
+		)
+	"""
 	period_details = _resolve_period(period or "monthly", date, from_date, to_date)
 
 	accounts = fetch_expense_accounts(company)
@@ -424,9 +465,9 @@ def get_expense_dashboard_data(
 			"balance": current_account_amount,
 			"currency": account_currency,
 			"balance_in_egp": current_base,
-			"sort_order": account.get("expense_dashboard_sort_order") or 0,
+			"sort_order": account.get("dashboard_sort_order") or 0,
 			"category": category_key,
-			"manual_category": account.get("expense_dashboard_category"),
+			"manual_category": account.get("dashboard_category"),
 		}
 
 		if compare_to_previous:
@@ -532,36 +573,24 @@ def _fetch_gl_totals(
 	if not account_names:
 		return {}
 
-	filters = ["account in %(accounts)s", "posting_date between %(from_date)s and %(to_date)s", "is_cancelled = 0"]
-	params = {
-		"accounts": account_names,
-		"from_date": from_date,
-		"to_date": to_date,
-	}
-
-	if company:
-		filters.append("company = %(company)s")
-		params["company"] = company
-
-	query = f"""
-		SELECT
-			account,
-			COALESCE(account_currency, '') AS account_currency,
-			SUM(debit_in_account_currency) - SUM(credit_in_account_currency) AS amount_account,
-			SUM(debit) - SUM(credit) AS amount_base
-		FROM `tabGL Entry`
-		WHERE {' AND '.join(filters)}
-		GROUP BY account, account_currency
-	"""
-
-	rows = frappe.db.sql(query, params, as_dict=True)
+	# Use Query Builder utility instead of raw SQL
+	from apex_dashboard.query_utils import get_gl_balances
+	
+	balances = get_gl_balances(
+		accounts=account_names,
+		from_date=from_date,
+		to_date=to_date,
+		company=company,
+		group_by_currency=True
+	)
+	
+	# Enrich with currency from account_map if missing
 	result: Dict[str, Dict[str, float]] = {}
-
-	for row in rows:
-		currency = row.account_currency or account_map.get(row.account, {}).get("account_currency") or _get_company_currency(account_map.get(row.account, {}).get("company"))
-		result[row.account] = {
-			"amount_account": flt(row.amount_account or 0.0, 2),
-			"amount_base": flt(row.amount_base or 0.0, 2),
+	for account_name, balance_data in balances.items():
+		currency = balance_data.get("currency") or account_map.get(account_name, {}).get("account_currency") or _get_company_currency(account_map.get(account_name, {}).get("company"))
+		result[account_name] = {
+			"amount_account": balance_data["amount_account"],
+			"amount_base": balance_data["amount_base"],
 			"currency": currency,
 		}
 
@@ -581,7 +610,7 @@ def _resolve_period(
 		start = getdate(from_date)
 		end = getdate(to_date)
 	elif period == "custom":
-		frappe.throw("Please set both From Date and To Date for custom period")
+		frappe.throw(_("Please set both From Date and To Date for custom period"))
 	else:
 		reference = getdate(date_str or nowdate())
 		if period == "daily":
@@ -600,7 +629,7 @@ def _resolve_period(
 			end = get_last_day(reference)
 
 	if start > end:
-		frappe.throw("From Date cannot be after To Date")
+		frappe.throw(_("From Date cannot be after To Date"))
 
 	duration_days = (end - start).days + 1
 	prev_end = start - timedelta(days=1)

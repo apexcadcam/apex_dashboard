@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include apex_dashboard *.css
+recursive-include apex_dashboard *.csv
+recursive-include apex_dashboard *.html
+recursive-include apex_dashboard *.ico
+recursive-include apex_dashboard *.js
+recursive-include apex_dashboard *.json
+recursive-include apex_dashboard *.md
+recursive-include apex_dashboard *.png
+recursive-include apex_dashboard *.py
+recursive-include apex_dashboard *.svg
+recursive-include apex_dashboard *.txt
+recursive-exclude apex_dashboard *.pyc

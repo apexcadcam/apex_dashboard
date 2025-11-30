@@ -1,0 +1,19 @@
+{
+    "creation": "2025-11-24 00:00:00.000000",
+    "docstatus": 0,
+    "doctype": "Page",
+    "idx": 0,
+    "modified": "2025-11-24 00:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "Apex Dashboard",
+    "name": "test",
+    "owner": "Administrator",
+    "page_name": "test",
+    "roles": [
+        {
+            "role": "System Manager"
+        }
+    ],
+    "standard": "Yes",
+    "title": "test"
+}

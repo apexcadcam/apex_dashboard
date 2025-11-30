@@ -6,7 +6,7 @@
   "modified": "2025-11-08 00:00:00.000000",
   "modified_by": "Administrator",
   "module": "Apex Dashboard",
-  "name": "expense-dashboard",
+  "name": "expense_dashboard",
   "owner": "Administrator",
   "page_name": "Expense Dashboard",
   "roles": [

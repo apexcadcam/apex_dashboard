@@ -1,0 +1,44 @@
+.template-dashboard-17 {
+    background: transparent;
+}
+
+.template-dashboard-17 .dashboard-container {
+    padding: 20px;
+}
+
+.template-dashboard-17 .dashboard-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.template-dashboard-17 .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.template-dashboard-17 .category-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.template-dashboard-17 .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.template-dashboard-17 .card-amount {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.template-dashboard-17 .account-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+}

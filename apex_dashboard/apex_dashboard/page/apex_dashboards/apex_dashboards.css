@@ -1,0 +1,138 @@
+/* Apex Dashboard Hub - Glass Apple Style */
+
+.apex-dashboard-container {
+    padding: 40px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1d1d1f;
+    background: #f5f5f7;
+    min-height: 100vh;
+}
+
+.apex-header {
+    margin-bottom: 40px;
+}
+
+.apex-header h1 {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    font-size: 20px;
+    color: #86868b;
+    font-weight: 400;
+}
+
+/* Category Section */
+.dashboard-category,
+.category-section {
+    margin-bottom: 50px;
+}
+
+.category-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #1d1d1f;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dashboard-grid,
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+/* Dashboard Card */
+.dashboard-card {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 24px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 180px;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.dashboard-icon,
+.card-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #007aff 0%, #00c6ff 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+}
+
+.dashboard-title,
+.card-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1d1d1f;
+}
+
+.dashboard-description,
+.card-meta {
+    font-size: 14px;
+    color: #86868b;
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .apex-dashboard-container {
+    background: #000000;
+    color: #f5f5f7;
+}
+
+[data-theme="dark"] .apex-header h1 {
+    background: linear-gradient(135deg, #ffffff 0%, #a1a1a6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+[data-theme="dark"] .dashboard-card {
+    background: rgba(28, 28, 30, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .dashboard-card:hover {
+    background: rgba(44, 44, 46, 0.85);
+}
+
+[data-theme="dark"] .category-title {
+    color: #f5f5f7;
+}
+
+[data-theme="dark"] .dashboard-title,
+[data-theme="dark"] .card-title {
+    color: #f5f5f7;
+}

@@ -1,0 +1,44 @@
+.test2-dashboard {
+    background: transparent;
+}
+
+.test2-dashboard .dashboard-container {
+    padding: 20px;
+}
+
+.test2-dashboard .dashboard-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.test2-dashboard .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.test2-dashboard .category-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.test2-dashboard .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.test2-dashboard .card-amount {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.test2-dashboard .account-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+}

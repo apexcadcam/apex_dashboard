@@ -1,0 +1,33 @@
+<div class="liquidity-dashboard">
+    <div class="dashboard-header">
+        <div class="header-content">
+            <h1>Liquidity Overview</h1>
+            <p class="subtitle">Real-time Cash & Bank Balances</p>
+        </div>
+        <div class="header-actions">
+            <div class="total-liquidity-card">
+                <span class="label">Total Liquidity</span>
+                <span class="value" id="total-liquidity-value">Loading...</span>
+            </div>
+            <button class="btn btn-glass" id="refresh-btn">
+                <i class="fa fa-refresh"></i>
+            </button>
+            <button class="btn btn-glass" id="config-btn">
+                <i class="fa fa-cog"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="dashboard-loader" class="loader-container">
+        <div class="spinner"></div>
+        <p>Fetching latest rates & balances...</p>
+    </div>
+
+    <div id="dashboard-content" class="dashboard-grid" style="display: none;">
+        <!-- Bank Cards will be injected here -->
+    </div>
+
+    <div class="dashboard-footer">
+        <p>Exchange rates provided by OpenExchangeRates. Last updated: <span id="last-updated">-</span></p>
+    </div>
+</div>
