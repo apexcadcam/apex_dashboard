@@ -262,6 +262,25 @@ fixtures = [
 		"filters": [
 			["module", "=", "Apex Dashboard"]
 		],
+	},
+	{
+		"dt": "Custom HTML Block",
+		"filters": [
+			["name", "in", [
+				"Dashboard Profile Banner",
+				"Dashboard Clock",
+				"Dashboard Analog Clock",
+				"Dashboard Holidays",
+				"Dashboard Support",
+				"Dashboard Notes"
+			]]
+		]
+	},
+	{
+		"dt": "Workspace",
+		"filters": [
+			["name", "=", "Apex Dashboards Hub"]
+		]
 	}
 ]
 
