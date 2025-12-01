@@ -1,16 +1,42 @@
 import frappe
 from frappe import _
-from frappe.utils import flt, today
+from frappe.utils import flt, today, getdate, add_days, add_months, get_first_day, get_last_day
 from frappe.query_builder import DocType
 from frappe.query_builder.functions import Sum, Count
 
+def get_period_dates(period):
+	current_date = getdate(today())
+	
+	if period == "Today":
+		return current_date, current_date
+	elif period == "This Week":
+		start = add_days(current_date, -current_date.weekday())
+		end = add_days(start, 6)
+		return start, end
+	elif period == "This Month":
+		return get_first_day(current_date), get_last_day(current_date)
+	elif period == "Last Month":
+		last_month = add_months(current_date, -1)
+		return get_first_day(last_month), get_last_day(last_month)
+	elif period == "This Year":
+		return getdate(f"{current_date.year}-01-01"), getdate(f"{current_date.year}-12-31")
+	elif period == "Last Year":
+		last_year = current_date.year - 1
+		return getdate(f"{last_year}-01-01"), getdate(f"{last_year}-12-31")
+	elif period == "All Time":
+		return getdate("2000-01-01"), current_date
+	else:
+		return get_first_day(current_date), get_last_day(current_date)
+
 @frappe.whitelist()
-def get_dashboard_data(company=None, period="This Month", from_date=None, to_date=None):
+def get_dashboard_data(company=None, period="Today", from_date=None, to_date=None, fiscal_year=None):
 	"""
 	Get inventory dashboard data with dynamic card configuration.
+	Note: Currently returns real-time stock (Bin) regardless of date filter, 
+	as historical stock calculation is resource intensive.
 	"""
 	# Check cache first
-	cache_key = f"inventory_{company}_{period}_{from_date}_{to_date}"
+	cache_key = f"inventory_{company}_{period}_{from_date}_{to_date}_{fiscal_year}"
 	cached_data = frappe.cache().get_value(cache_key)
 	if cached_data:
 		return cached_data
@@ -18,24 +44,39 @@ def get_dashboard_data(company=None, period="This Month", from_date=None, to_dat
 	if not company:
 		company = frappe.defaults.get_user_default("Company")
 
+	# Determine Date Range (for display purposes mostly, as we use Bin)
+	if fiscal_year:
+		from_date, to_date = frappe.db.get_value("Fiscal Year", fiscal_year, ["year_start_date", "year_end_date"])
+	elif period == "Custom" and from_date and to_date:
+		from_date = getdate(from_date)
+		to_date = getdate(to_date)
+	else:
+		if not period:
+			period = "Today"
+		from_date, to_date = get_period_dates(period)
+
 	# Get Company Currency
 	currency = frappe.get_value("Company", company, "default_currency") or "EGP"
 
 	# 1. Get Total Stock Value
 	Bin = DocType("Bin")
+	Warehouse = DocType("Warehouse")
 	query_total = (
 		frappe.qb.from_(Bin)
+		.join(Warehouse).on(Bin.warehouse == Warehouse.name)
 		.select(
 			Count(Bin.item_code).distinct().as_("items_count"),
 			Sum(Bin.stock_value).as_("total_value")
 		)
 		.where(Bin.actual_qty > 0)
+		.where(Warehouse.company == company)
 	)
 	total_stock = query_total.run(as_dict=True)[0]
 
 	# 2. Define Categories (Groups)
-	# We will try to fetch configuration from Apex Dashboard Card if available
-	# Otherwise fallback to hardcoded defaults
+	# Hardcoded groups for standalone architecture
+	
+	groups_data = []
 	
 	default_groups = [
 		{
@@ -74,31 +115,10 @@ def get_dashboard_data(company=None, period="This Month", from_date=None, to_dat
 			"item_groups": ['Milling Tools', 'New Spare Parts', 'Suction']
 		}
 	]
-
-	# Fetch dynamic config if exists
-	cards = frappe.get_all("Apex Dashboard Card",
-		filters={"category": "Inventory", "is_active": 1},
-		fields=["name", "card_title", "color", "icon"]
-	)
-	
-	# Map dynamic cards to groups if they match names, or append new ones?
-	# For now, we'll stick to the fixed structure but override visual properties if a card matches the name
-	# This is a hybrid approach to keep the logic simple without complex dynamic query generation for now
-	
-	card_map = {c.name: c for c in cards}
-	
-	groups_data = []
 	
 	for group in default_groups:
-		# Override with dynamic config if available
-		if group["name"] in card_map:
-			card = card_map[group["name"]]
-			group["title"] = card.card_title
-			group["color"] = card.color
-			group["icon"] = card.icon
-			
 		# Fetch data for this group
-		group_data = get_group_data(group["item_groups"])
+		group_data = get_group_data(group["item_groups"], company)
 		
 		groups_data.append({
 			"name": group["title"], # Use title for display
@@ -111,13 +131,13 @@ def get_dashboard_data(company=None, period="This Month", from_date=None, to_dat
 		})
 
 	# 3. Get Alerts (Low Stock & Out of Stock)
-	alerts = get_alerts()
+	alerts = get_alerts(company)
 
 	# 4. Get Top Items
-	top_items = get_top_items()
+	top_items = get_top_items(company)
 
 	# 5. Get Warehouse Breakdown
-	warehouses = get_warehouse_breakdown()
+	warehouses = get_warehouse_breakdown(company)
 
 	# Build response data
 	data = {
@@ -141,14 +161,16 @@ def get_dashboard_data(company=None, period="This Month", from_date=None, to_dat
 	
 	return data
 
-def get_group_data(item_groups):
+def get_group_data(item_groups, company):
 	"""Helper to fetch stock data for specific item groups using Query Builder"""
 	Bin = DocType("Bin")
 	Item = DocType("Item")
+	Warehouse = DocType("Warehouse")
 	
 	query = (
 		frappe.qb.from_(Bin)
 		.join(Item).on(Bin.item_code == Item.name)
+		.join(Warehouse).on(Bin.warehouse == Warehouse.name)
 		.select(
 			Item.item_group,
 			Count(Bin.item_code).distinct().as_("count"),
@@ -158,7 +180,7 @@ def get_group_data(item_groups):
 		.where(Item.item_group.isin(item_groups))
 		.where(Bin.actual_qty > 0)
 		.where(Item.disabled == 0)
-		.where(Bin.warehouse.isin(['Demo Machines - AP', 'Headquarter Warehouse - AP', 'Used Machines - AP']))
+		.where(Warehouse.company == company)
 		.groupby(Item.item_group)
 		.orderby(Sum(Bin.stock_value), order=frappe.qb.desc)
 	)
@@ -172,15 +194,17 @@ def get_group_data(item_groups):
 		'details': details
 	}
 
-def get_alerts():
+def get_alerts(company):
 	"""Fetch low stock and out of stock items"""
 	Bin = DocType("Bin")
 	Item = DocType("Item")
+	Warehouse = DocType("Warehouse")
 	
 	# Low Stock (< 10)
 	low_stock = (
 		frappe.qb.from_(Bin)
 		.join(Item).on(Bin.item_code == Item.name)
+		.join(Warehouse).on(Bin.warehouse == Warehouse.name)
 		.select(
 			Item.item_name,
 			Item.item_group,
@@ -192,6 +216,7 @@ def get_alerts():
 		.where(Bin.actual_qty > 0)
 		.where(Bin.actual_qty < 10)
 		.where(Item.disabled == 0)
+		.where(Warehouse.company == company)
 		.orderby(Bin.stock_value, order=frappe.qb.desc)
 		.limit(10)
 	).run(as_dict=True)
@@ -200,6 +225,7 @@ def get_alerts():
 	out_of_stock = (
 		frappe.qb.from_(Bin)
 		.join(Item).on(Bin.item_code == Item.name)
+		.join(Warehouse).on(Bin.warehouse == Warehouse.name)
 		.select(
 			Item.item_name,
 			Item.item_group,
@@ -209,6 +235,7 @@ def get_alerts():
 		)
 		.where(Bin.actual_qty <= 0)
 		.where(Item.disabled == 0)
+		.where(Warehouse.company == company)
 		.orderby(Bin.actual_qty, order=frappe.qb.asc)
 		.limit(5)
 	).run(as_dict=True)
@@ -219,14 +246,16 @@ def get_alerts():
 		"total_alerts": len(low_stock) + len(out_of_stock)
 	}
 
-def get_top_items():
+def get_top_items(company):
 	"""Fetch top items by value"""
 	Bin = DocType("Bin")
 	Item = DocType("Item")
+	Warehouse = DocType("Warehouse")
 	
 	return (
 		frappe.qb.from_(Bin)
 		.join(Item).on(Bin.item_code == Item.name)
+		.join(Warehouse).on(Bin.warehouse == Warehouse.name)
 		.select(
 			Item.item_name,
 			Item.item_group,
@@ -235,16 +264,19 @@ def get_top_items():
 			Item.stock_uom
 		)
 		.where(Bin.actual_qty > 0)
+		.where(Warehouse.company == company)
 		.orderby(Bin.stock_value, order=frappe.qb.desc)
 		.limit(10)
 	).run(as_dict=True)
 
-def get_warehouse_breakdown():
+def get_warehouse_breakdown(company):
 	"""Fetch warehouse breakdown"""
 	Bin = DocType("Bin")
+	Warehouse = DocType("Warehouse")
 	
 	return (
 		frappe.qb.from_(Bin)
+		.join(Warehouse).on(Bin.warehouse == Warehouse.name)
 		.select(
 			Bin.warehouse,
 			Count(Bin.item_code).distinct().as_("items_count"),
@@ -252,6 +284,7 @@ def get_warehouse_breakdown():
 			Sum(Bin.stock_value).as_("total_value")
 		)
 		.where(Bin.actual_qty > 0)
+		.where(Warehouse.company == company)
 		.groupby(Bin.warehouse)
 		.orderby(Sum(Bin.stock_value), order=frappe.qb.desc)
 		.limit(15)

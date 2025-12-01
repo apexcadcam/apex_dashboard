@@ -7,12 +7,8 @@ def get_exchange_rates():
 	"""
 	Fetches exchange rates from OpenExchangeRates API (same as Liquidity Dashboard).
 	"""
-	# Get API key from config
-	try:
-		config = frappe.get_single("Apex Dashboard Config")
-		api_key = config.api_key if config else None
-	except:
-		api_key = None
+	# Get API key from site config
+	api_key = frappe.conf.get("openexchangerates_api_key")
 	
 	# Check cache first
 	cache_key = "suppliers_dashboard_rates"
@@ -42,6 +38,7 @@ def get_exchange_rates():
 				if currency == "USD":
 					rates[currency] = usd_to_egp
 				else:
+					# Cross-currency conversion: EUR to EGP = (USD to EGP) × (EUR to USD)
 					if rate_in_usd > 0:
 						rates[currency] = usd_to_egp / rate_in_usd
 					else:
@@ -58,6 +55,7 @@ def get_fallback_rates():
 	"""Fallback to Currency Exchange table."""
 	rates = {'EGP': 1.0}
 	for curr in ['USD', 'EUR', 'SAR']:
+		# Get latest exchange rate
 		rate_data = frappe.db.sql("""
 			SELECT exchange_rate 
 			FROM `tabCurrency Exchange`
@@ -80,18 +78,54 @@ def get_fallback_rates():
 				rates[curr] = 13.0
 	return rates
 
+def get_period_dates(period):
+	current_date = getdate(today())
+	
+	if period == "Today":
+		return current_date, current_date
+	elif period == "This Week":
+		start = add_days(current_date, -current_date.weekday())
+		end = add_days(start, 6)
+		return start, end
+	elif period == "This Month":
+		return get_first_day(current_date), get_last_day(current_date)
+	elif period == "Last Month":
+		last_month = add_months(current_date, -1)
+		return get_first_day(last_month), get_last_day(last_month)
+	elif period == "This Year":
+		return getdate(f"{current_date.year}-01-01"), getdate(f"{current_date.year}-12-31")
+	elif period == "Last Year":
+		last_year = current_date.year - 1
+		return getdate(f"{last_year}-01-01"), getdate(f"{last_year}-12-31")
+	elif period == "All Time":
+		return getdate("2000-01-01"), current_date
+	else:
+		return get_first_day(current_date), get_last_day(current_date)
+
 @frappe.whitelist()
-def get_dashboard_data(company=None):
+def get_dashboard_data(company=None, period="All Time", from_date=None, to_date=None, fiscal_year=None):
 	"""Get comprehensive supplier dashboard data"""
 	if not company:
 		company = frappe.defaults.get_user_default("Company")
 	
+	# Determine Date Range
+	if fiscal_year:
+		from_date, to_date = frappe.db.get_value("Fiscal Year", fiscal_year, ["year_start_date", "year_end_date"])
+	elif period == "Custom" and from_date and to_date:
+		from_date = getdate(from_date)
+		to_date = getdate(to_date)
+	else:
+		if not period:
+			period = "All Time"
+		from_date, to_date = get_period_dates(period)
+	
 	currency = frappe.get_value("Company", company, "default_currency") or "EGP"
 	
-	# Get exchange rates using OpenExchangeRates API (same as Liquidity Dashboard)
+	# Get exchange rates
 	exchange_rates = get_exchange_rates()
 	
 	# 1. Total Payables (Outstanding Purchase Invoices) - Grouped by Currency
+	# Filter by posting_date to show outstanding invoices FROM that period
 	payables_data = frappe.db.sql("""
 		SELECT 
 			pi.supplier,
@@ -107,9 +141,10 @@ def get_dashboard_data(company=None):
 			AND pi.company = %s
 			AND pi.outstanding_amount > 0
 			AND s.disabled = 0
+			AND pi.posting_date BETWEEN %s AND %s
 		GROUP BY pi.supplier, pi.currency
 		ORDER BY pi.currency, outstanding DESC
-	""", company, as_dict=1)
+	""", (company, from_date, to_date), as_dict=1)
 	
 	# Group by currency
 	payables_by_currency = {}
@@ -144,8 +179,9 @@ def get_dashboard_data(company=None):
 		FROM `tabPurchase Invoice` pi
 		WHERE pi.docstatus = 1
 			AND pi.company = %s
+			AND pi.posting_date BETWEEN %s AND %s
 		GROUP BY pi.currency
-	""", company, as_dict=1)
+	""", (company, from_date, to_date), as_dict=1)
 	
 	total_purchase_egp = 0
 	purchase_breakdown = {}  # Breakdown by currency
@@ -155,9 +191,7 @@ def get_dashboard_data(company=None):
 		purchase_breakdown[curr] = d.get('total', 0)
 		total_purchase_egp += d.get('total', 0) * exchange_rates.get(curr, 1.0)
 	
-	# 2. Total Paid (Payment Entries - This Month)
-	from_date, to_date = get_first_day(getdate(today())), get_last_day(getdate(today()))
-	
+	# 2. Total Paid (Payment Entries)
 	paid_data = frappe.db.sql("""
 		SELECT 
 			pe.party as supplier,
@@ -179,17 +213,17 @@ def get_dashboard_data(company=None):
 	total_paid = sum(d.get('paid_amount', 0) for d in paid_data)
 	paid_count = sum(d.get('payment_count', 0) for d in paid_data)
 	
-	# 3. Active Suppliers (with transactions in last 90 days)
+	# 3. Active Suppliers (with transactions in period)
 	active_suppliers = frappe.db.sql("""
 		SELECT DISTINCT pi.supplier, s.supplier_name, s.supplier_group
 		FROM `tabPurchase Invoice` pi
 		JOIN `tabSupplier` s ON pi.supplier = s.name
 		WHERE pi.docstatus = 1
 			AND pi.company = %s
-			AND pi.posting_date >= DATE_SUB(CURDATE(), INTERVAL 90 DAY)
+			AND pi.posting_date BETWEEN %s AND %s
 			AND s.disabled = 0
 		ORDER BY s.supplier_name
-	""", company, as_dict=1)
+	""", (company, from_date, to_date), as_dict=1)
 	
 	# Group by supplier group
 	supplier_groups = {}
@@ -217,10 +251,11 @@ def get_dashboard_data(company=None):
 			AND pi.company = %s
 			AND pi.outstanding_amount > 0
 			AND pi.due_date < CURDATE()
+			AND pi.posting_date BETWEEN %s AND %s
 			AND s.disabled = 0
 		GROUP BY pi.supplier, pi.currency
 		ORDER BY pi.currency, overdue_amount DESC
-	""", company, as_dict=1)
+	""", (company, from_date, to_date), as_dict=1)
 	
 	# Group by currency
 	overdue_by_currency = {}
@@ -260,10 +295,11 @@ def get_dashboard_data(company=None):
 		WHERE pi.docstatus = 1
 			AND pi.company = %s
 			AND s.disabled = 0
+			AND pi.posting_date BETWEEN %s AND %s
 		GROUP BY pi.supplier, pi.currency
 		ORDER BY total_purchase_egp DESC
 		LIMIT 20
-	""", company, as_dict=1)
+	""", (company, from_date, to_date), as_dict=1)
 	
 	return {
 		'currency': currency,

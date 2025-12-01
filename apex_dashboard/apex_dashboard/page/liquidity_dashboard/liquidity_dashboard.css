@@ -134,7 +134,8 @@
 }
 
 /* Grid */
-.dashboard-grid {
+/* Grid */
+.liquidity-dashboard .dashboard-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 	gap: 25px;
@@ -325,10 +326,11 @@
 		font-size: 16px;
 	}
 }
+
 /* Dark Theme Overrides */
 [data-theme="dark"] {
---text-primary: #ffffff !important;
---text-secondary: #9ca3af !important;
+	--text-primary: #ffffff !important;
+	--text-secondary: #9ca3af !important;
 }
 
 
@@ -338,9 +340,9 @@
 .expense-dashboard,
 .liquidity-dashboard,
 .equity-dashboard {
-    /* Default text colors for light theme */
-    --text-color: #1a1a1a;
-    --text-secondary: #666666;
+	/* Default text colors for light theme */
+	--text-color: #1a1a1a;
+	--text-secondary: #666666;
 }
 
 /* Dark theme overrides */
@@ -348,8 +350,8 @@ html[data-theme="dark"] .dashboard-template,
 html[data-theme="dark"] .expense-dashboard,
 html[data-theme="dark"] .liquidity-dashboard,
 html[data-theme="dark"] .equity-dashboard {
-    --text-color: #ffffff;
-    --text-secondary: #cccccc;
+	--text-color: #ffffff;
+	--text-secondary: #cccccc;
 }
 
 /* Apply to ALL text elements */
@@ -361,11 +363,12 @@ html[data-theme="dark"] .equity-dashboard {
 .category-card .account-balance,
 .category-card .category-name,
 .category-card .category-total {
-    color: var(--text-color) !important;
+	color: var(--text-color) !important;
 }
 
 /* Remove any inline color styles */
 .category-card[style*="color"] {
-    color: var(--text-color) !important;
+	color: var(--text-color) !important;
 }
+
 /* END UNIFIED FIX */

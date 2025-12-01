@@ -1,8 +1,29 @@
 {
  "charts": [],
- "content": "[{\"id\":\"header1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Apex Dashboards Hub</span>\",\"col\":12}},{\"id\":\"shortcut1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Apex Dashboards\",\"col\":3}},{\"id\":\"yiliqVLuCi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Apex Dashboard\",\"col\":3}},{\"id\":\"shortcut2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Categories\",\"col\":3}},{\"id\":\"qEhql1U-7h\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Apex Dashboard Card\",\"col\":3}},{\"id\":\"MFVbMPUmAC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Apex Dashboard Config\",\"col\":3}}]",
- "creation": "2025-11-20 20:05:55.794860",
- "custom_blocks": [],
+ "content": "[{\"type\": \"header\", \"data\": {\"text\": \"Apex Dashboards Hub\", \"col\": 12}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Apex Dashboards\", \"col\": 3}}, {\"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Dashboard Profile Banner\", \"col\": 12}}, {\"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Dashboard Holidays\", \"col\": 6}}, {\"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Dashboard Analog Clock\", \"col\": 6}}, {\"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Dashboard Clock\", \"col\": 6}}, {\"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Dashboard Notes\", \"col\": 12}}]",
+ "creation": "2025-12-01 18:27:41.438504",
+ "custom_blocks": [
+  {
+   "custom_block_name": "Dashboard Profile Banner",
+   "label": "Dashboard Profile Banner"
+  },
+  {
+   "custom_block_name": "Dashboard Holidays",
+   "label": "Dashboard Holidays"
+  },
+  {
+   "custom_block_name": "Dashboard Clock",
+   "label": "Dashboard Clock"
+  },
+  {
+   "custom_block_name": "Dashboard Analog Clock",
+   "label": "Dashboard Analog Clock"
+  },
+  {
+   "custom_block_name": "Dashboard Notes",
+   "label": "Dashboard Notes"
+  }
+ ],
  "docstatus": 0,
  "doctype": "Workspace",
  "hide_custom": 0,
@@ -21,29 +42,9 @@
    "link_type": "Page",
    "onboard": 0,
    "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Categories",
-   "link_count": 0,
-   "link_to": "Apex Dashboard Category",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Manage Dashboards",
-   "link_count": 0,
-   "link_to": "Apex Dashboard",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
   }
  ],
- "modified": "2025-11-23 14:25:29.690620",
+ "modified": "2025-12-02 00:03:15.938735",
  "modified_by": "Administrator",
  "module": "Apex Dashboard",
  "name": "Apex Dashboards Hub",
@@ -55,41 +56,11 @@
  "sequence_id": 0.0,
  "shortcuts": [
   {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Apex Dashboard Card",
-   "link_to": "Apex Dashboard Card",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Apex Dashboard",
-   "link_to": "Apex Dashboard",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Apex Dashboard Config",
-   "link_to": "Apex Dashboard Config",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
+   "color": "Blue",
+   "doc_view": "",
    "label": "Apex Dashboards",
    "link_to": "apex_dashboards",
    "type": "Page"
-  },
-  {
-   "color": "Blue",
-   "doc_view": "List",
-   "label": "Categories",
-   "link_to": "Apex Dashboard Category",
-   "type": "DocType"
   }
  ],
  "title": "Apex Dashboards Hub"

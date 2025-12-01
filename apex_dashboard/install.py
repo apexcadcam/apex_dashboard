@@ -16,6 +16,11 @@ def after_install() -> None:
 		print("=" * 70)
 
 		import_custom_fields()
+		
+		# Setup default data
+		from apex_dashboard.setup_defaults import setup_defaults
+		setup_defaults()
+		
 		frappe.db.commit()
 
 		print("=" * 70)

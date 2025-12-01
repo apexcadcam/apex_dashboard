@@ -89,6 +89,86 @@ def get_gl_balances(
     return result
 
 
+def get_expense_totals(
+    accounts: List[str],
+    from_date: str,
+    to_date: str,
+    company: Optional[str] = None,
+    group_by_currency: bool = True
+) -> Dict[str, Dict]:
+    """
+    Get GL Entry totals for expense accounts (debit only, no credit subtraction)
+    
+    Args:
+        accounts: List of expense account names
+        from_date: Start date (YYYY-MM-DD)
+        to_date: End date (YYYY-MM-DD)
+        company: Optional company filter
+        group_by_currency: If True, group by account and currency
+    
+    Returns:
+        Dict mapping account name to expense data:
+        {
+            "Account Name": {
+                "amount_account": float,  # Total debit in account currency
+                "amount_base": float,      # Total debit in company currency
+                "currency": str            # Account currency
+            }
+        }
+    
+    Example:
+        expenses = get_expense_totals(
+            accounts=["Salaries - A", "Rent - A"],
+            from_date="2025-01-01",
+            to_date="2025-12-31",
+            company="Apex Company"
+        )
+    """
+    if not accounts:
+        return {}
+    
+    GLEntry = DocType("GL Entry")
+    
+    # Build base query - for expenses, we only sum debits
+    query = (
+        frappe.qb.from_(GLEntry)
+        .select(
+            GLEntry.account,
+            Coalesce(GLEntry.account_currency, '').as_('account_currency'),
+            Sum(GLEntry.debit_in_account_currency).as_('amount_account'),
+            Sum(GLEntry.debit).as_('amount_base')
+        )
+        .where(GLEntry.account.isin(accounts))
+        .where(GLEntry.posting_date.between(from_date, to_date))
+        .where(GLEntry.is_cancelled == 0)
+    )
+    
+    # Add company filter if provided
+    if company:
+        query = query.where(GLEntry.company == company)
+    
+    # Group by account and optionally currency
+    if group_by_currency:
+        query = query.groupby(GLEntry.account, GLEntry.account_currency)
+    else:
+        query = query.groupby(GLEntry.account)
+    
+    # Execute query
+    rows = query.run(as_dict=True)
+    
+    # Format results
+    result = {}
+    for row in rows:
+        result[row.account] = {
+            "amount_account": flt(row.amount_account or 0.0, 2),
+            "amount_base": flt(row.amount_base or 0.0, 2),
+            "currency": row.account_currency or ""
+        }
+    
+    return result
+
+
+
 def get_child_accounts(
     parent_account: str,
     company: str,

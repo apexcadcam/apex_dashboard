@@ -26,7 +26,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 app_include_css = "/assets/apex_dashboard/css/glass_apple.css"
-# app_include_js = "/assets/apex_dashboard/js/apex_dashboard.js"
+app_include_js = "/assets/apex_dashboard/js/workspace_customizations.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/apex_dashboard/css/apex_dashboard.css"

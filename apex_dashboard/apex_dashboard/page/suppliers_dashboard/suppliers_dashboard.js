@@ -1,49 +1,186 @@
 frappe.pages['suppliers_dashboard'].on_page_load = function (wrapper) {
-	console.log('Suppliers Dashboard: on_page_load called');
 	new SuppliersDashboard(wrapper);
 };
 
 class SuppliersDashboard {
 	constructor(wrapper) {
-		console.log('SuppliersDashboard constructor called');
+		this.wrapper = $(wrapper);
+
 		this.page = frappe.ui.make_app_page({
 			parent: wrapper,
-			title: '📦 Suppliers Dashboard',
+			title: 'Suppliers Dashboard',
 			single_column: true
 		});
 
-		this.wrapper = $(wrapper);
-		this.$container = this.page.main;
-		this.$container.addClass('suppliers-dashboard-container');
+		// Load CSS
+		frappe.require('/assets/apex_dashboard/page/suppliers_dashboard/suppliers_dashboard.css');
+
+		const TEMPLATE = `
+		<div class="suppliers-dashboard-container dashboard-template">
+			<div class="dashboard-header">
+				<div class="header-content">
+					<button class="btn-glass" id="back-btn">
+						<i class="fa fa-arrow-left"></i> Hub
+					</button>
+					<div class="header-text">
+						<h1>Suppliers Overview</h1>
+						<p class="subtitle">Track your supplier performance and payables</p>
+					</div>
+				</div>
+				<div class="header-actions">
+					<div class="total-card" style="padding: 10px 20px; min-width: 200px;">
+						<span class="label" style="font-size: 12px; color: #9ca3af; display: block;">Total Payables</span>
+						<span class="value" id="header-total-payables" style="font-size: 20px; font-weight: bold;">Loading...</span>
+					</div>
+					<button class="btn-glass" id="refresh-btn">
+						<i class="fa fa-refresh"></i>
+					</button>
+				</div>
+			</div>
+
+			<div id="dashboard-loader" class="dashboard-loader">
+				<div class="spinner"></div>
+				<p>Loading dashboard...</p>
+			</div>
+
+			<div id="dashboard-content" style="display: none;">
+				<!-- Content will be injected here -->
+			</div>
+		</div>
+		`;
+
+		// Load HTML Template
+		$(TEMPLATE).appendTo(this.page.body);
+
+		// Hide standard page title since we have a custom header
+		if (this.page.page_header) {
+			this.page.page_header.hide();
+		} else {
+			this.wrapper.find('.page-head').hide();
+		}
 
 		this.format_currency = this.format_currency.bind(this);
-
-		console.log('Container initialized:', this.$container);
-		this.fetch_data();
+		this.setup_filters();
+		this.bind_events();
+		this.load_data();
 	}
 
-	fetch_data() {
-		console.log('Fetching suppliers dashboard data...');
+	bind_events() {
+		this.wrapper.find('#back-btn').on('click', () => {
+			frappe.set_route('apex_dashboards');
+		});
+
+		this.wrapper.find('#refresh-btn').on('click', () => {
+			this.load_data();
+		});
+	}
+
+	setup_filters() {
+		// Company filter
+		this.page.add_field({
+			fieldname: 'company',
+			label: __('Company'),
+			fieldtype: 'Link',
+			options: 'Company',
+			default: frappe.defaults.get_user_default('Company'),
+			change: () => this.load_data()
+		});
+
+		// Period filter
+		this.page.add_field({
+			fieldname: 'period',
+			label: __('Period'),
+			fieldtype: 'Select',
+			options: ['', 'Today', 'This Week', 'This Month', 'Last Month', 'This Year', 'Last Year', 'Fiscal Year', 'Custom', 'All Time'],
+			default: 'All Time',
+			change: () => {
+				const period = this.page.fields_dict.period.get_value();
+
+				// Toggle Date Fields
+				const isCustom = period === 'Custom';
+				if (isCustom) {
+					this.page.fields_dict.from_date.$wrapper.removeClass('hide').show();
+					this.page.fields_dict.to_date.$wrapper.removeClass('hide').show();
+				} else {
+					this.page.fields_dict.from_date.$wrapper.addClass('hide').hide();
+					this.page.fields_dict.to_date.$wrapper.addClass('hide').hide();
+				}
+
+				// Toggle Fiscal Year Field
+				const isFiscalYear = period === 'Fiscal Year';
+				if (isFiscalYear) {
+					this.page.fields_dict.fiscal_year.$wrapper.removeClass('hide').show();
+				} else {
+					this.page.fields_dict.fiscal_year.$wrapper.addClass('hide').hide();
+					this.page.fields_dict.fiscal_year.set_input(''); // Clear value when hidden
+				}
+
+				if (period !== 'Custom' && period !== 'Fiscal Year') {
+					this.load_data();
+				}
+			}
+		});
+
+		// Fiscal Year Filter (Hidden by default)
+		this.page.add_field({
+			fieldname: 'fiscal_year',
+			label: __('Select Year'),
+			fieldtype: 'Link',
+			options: 'Fiscal Year',
+			change: () => {
+				const fiscal_year = this.page.fields_dict.fiscal_year.get_value();
+				if (fiscal_year) {
+					this.load_data();
+				}
+			}
+		});
+
+		// Date range filters (hidden by default)
+		this.page.add_field({
+			fieldname: 'from_date',
+			label: __('From Date'),
+			fieldtype: 'Date',
+			change: () => this.load_data()
+		});
+
+		this.page.add_field({
+			fieldname: 'to_date',
+			label: __('To Date'),
+			fieldtype: 'Date',
+			change: () => this.load_data()
+		});
+
+		// Initialize visibility based on default period
+		this.page.fields_dict.period.$input.trigger('change');
+	}
+
+	load_data() {
+		const company = this.page.fields_dict.company.get_value();
+		const period = this.page.fields_dict.period.get_value();
+		const from_date = this.page.fields_dict.from_date.get_value();
+		const to_date = this.page.fields_dict.to_date.get_value();
+		const fiscal_year = this.page.fields_dict.fiscal_year.get_value();
+
 		this.show_loader(true);
 
 		frappe.call({
 			method: 'apex_dashboard.apex_dashboard.page.suppliers_dashboard.suppliers_dashboard.get_dashboard_data',
 			args: {
-				company: frappe.defaults.get_user_default("Company")
+				company: company,
+				period: period,
+				from_date: from_date,
+				to_date: to_date,
+				fiscal_year: fiscal_year
 			},
 			callback: (r) => {
-				console.log('Data received:', r);
 				this.show_loader(false);
 				if (r.message) {
-					console.log('Rendering dashboard with data:', r.message);
 					this.render(r.message);
 				} else {
-					console.error('No data in response');
-					this.$container.html('<div class="no-data">No data available</div>');
+					this.wrapper.find('#dashboard-content').html('<div class="no-data">No data available</div>').show();
 				}
 			},
 			error: (r) => {
-				console.error('Error loading dashboard:', r);
 				this.show_loader(false);
 				frappe.msgprint(__('Failed to load dashboard data'));
 			}
@@ -52,13 +189,19 @@ class SuppliersDashboard {
 
 	show_loader(show) {
 		if (show) {
-			this.$container.html('<div class="dashboard-loader"><div class="spinner"></div><p>Loading dashboard...</p></div>');
+			this.wrapper.find('#dashboard-loader').show();
+			this.wrapper.find('#dashboard-content').hide();
+		} else {
+			this.wrapper.find('#dashboard-loader').hide();
+			this.wrapper.find('#dashboard-content').show();
 		}
 	}
 
 	render(data) {
-		console.log('render() called with data:', data);
 		const currency = data.currency || 'EGP';
+
+		// Update Header Total
+		this.wrapper.find('#header-total-payables').text(this.format_currency(data.total_payables_egp, 'EGP'));
 
 		// Render payables cards for each currency
 		let payablesCards = '';
@@ -100,10 +243,7 @@ class SuppliersDashboard {
 			</div>
 		`;
 
-		console.log('Generated HTML length:', html.length);
-		console.log('Container element:', this.$container);
-		this.$container.html(html);
-		console.log('HTML inserted into container');
+		this.wrapper.find('#dashboard-content').html(html);
 	}
 
 	render_card(title, data, currency, color, type) {

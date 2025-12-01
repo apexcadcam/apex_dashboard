@@ -573,10 +573,10 @@ def _fetch_gl_totals(
 	if not account_names:
 		return {}
 
-	# Use Query Builder utility instead of raw SQL
-	from apex_dashboard.query_utils import get_gl_balances
+	# Use Query Builder utility for expense accounts (debit only)
+	from apex_dashboard.query_utils import get_expense_totals
 	
-	balances = get_gl_balances(
+	balances = get_expense_totals(
 		accounts=account_names,
 		from_date=from_date,
 		to_date=to_date,

@@ -11,16 +11,6 @@ frappe.pages['apex_dashboards'].on_page_load = function (wrapper) {
     // Load HTML Template
     $(frappe.render_template('apex_dashboards', {})).appendTo(page.body);
 
-    // Add "Add Dashboard" button
-    page.add_inner_button(__('Add Dashboard'), function () {
-        frappe.new_doc('Apex Dashboard');
-    });
-
-    // Add "Manage Categories" button
-    page.add_inner_button(__('Manage Categories'), function () {
-        frappe.set_route('List', 'Apex Dashboard Category');
-    });
-
     // Initialize
     new ApexDashboardHub(wrapper);
 }
@@ -29,61 +19,70 @@ class ApexDashboardHub {
     constructor(wrapper) {
         this.wrapper = $(wrapper);
         this.grid = this.wrapper.find('#apex-dashboard-grid');
-        this.fetch_dashboards();
+        this.render_dashboards();
     }
 
-    fetch_dashboards() {
-        frappe.call({
-            method: 'frappe.client.get_list',
-            args: {
-                doctype: 'Apex Dashboard',
-                filters: {
-                    is_active: 1
-                },
-                fields: ['name', 'title', 'category', 'route', 'icon', 'dashboard_type']
+    get_dashboards() {
+        return [
+            {
+                name: 'Expenses Dashboard',
+                title: 'Expenses Dashboard',
+                category: 'Finance',
+                route: 'expenses_dashboard',
+                icon: 'fa fa-credit-card',
+                dashboard_type: 'Custom Page'
             },
-            callback: (r) => {
-                if (r.message) {
-                    this.render_dashboards(r.message);
-                }
+            {
+                name: 'Liquidity Dashboard',
+                title: 'Liquidity Dashboard',
+                category: 'Finance',
+                route: 'liquidity_dashboard',
+                icon: 'fa fa-university',
+                dashboard_type: 'Custom Page'
+            },
+            {
+                name: 'Profitability Dashboard',
+                title: 'Profitability Dashboard',
+                category: 'Finance',
+                route: 'profitability_dashboard',
+                icon: 'fa fa-line-chart',
+                dashboard_type: 'Custom Page'
+            },
+            {
+                name: 'Inventory Dashboard',
+                title: 'Inventory Dashboard',
+                category: 'Operations',
+                route: 'inventory_dashboard',
+                icon: 'fa fa-cubes',
+                dashboard_type: 'Custom Page'
+            },
+            {
+                name: 'Suppliers Dashboard',
+                title: 'Suppliers Dashboard',
+                category: 'Operations',
+                route: 'suppliers_dashboard',
+                icon: 'fa fa-truck',
+                dashboard_type: 'Custom Page'
+            },
+            {
+                name: 'Equity Dashboard',
+                title: 'Equity Dashboard',
+                category: 'Finance',
+                route: 'equity_dashboard',
+                icon: 'fa fa-balance-scale',
+                dashboard_type: 'Custom Page'
             }
-        });
+        ];
     }
 
-    render_dashboards(dashboards) {
+    render_dashboards() {
+        const dashboards = this.get_dashboards();
         this.grid.empty();
 
-        if (dashboards.length === 0) {
-            this.grid.append('<div class="text-muted text-center p-5">No active dashboards found.</div>');
-            return;
-        }
-
-        // Group by category
-        const grouped = {};
+        // Render all cards in a single grid (no category grouping)
         dashboards.forEach(dashboard => {
-            const category = dashboard.category || 'Other';
-            if (!grouped[category]) {
-                grouped[category] = [];
-            }
-            grouped[category].push(dashboard);
-        });
-
-        // Render each category
-        Object.keys(grouped).forEach(category => {
-            const categorySection = $(`
-                <div class="dashboard-category">
-                    <h3 class="category-title">${category}</h3>
-                    <div class="dashboard-grid"></div>
-                </div>
-            `);
-
-            const categoryGrid = categorySection.find('.dashboard-grid');
-            grouped[category].forEach(dashboard => {
-                const cardHtml = this.render_dashboard_card(dashboard);
-                categoryGrid.append(cardHtml);
-            });
-
-            this.grid.append(categorySection);
+            const cardHtml = this.render_dashboard_card(dashboard);
+            this.grid.append(cardHtml);
         });
 
         this.attach_card_listeners();
@@ -116,16 +115,9 @@ class ApexDashboardHub {
     attach_card_listeners() {
         this.grid.find('.dashboard-card').on('click', function () {
             const route = $(this).data('route');
-            const type = $(this).data('type');
 
             if (route) {
-                if (type === 'Custom Page') {
-                    // Custom pages have their own .js/.py files - route directly
-                    frappe.set_route(route);
-                } else {
-                    // Dynamic dashboards use generic_dashboard template
-                    frappe.set_route('generic_dashboard', route);
-                }
+                frappe.set_route(route);
             }
         });
     }
