@@ -1,28 +1,15 @@
 {
  "charts": [],
- "content": "[{\"type\": \"header\", \"data\": {\"text\": \"Apex Dashboards Hub\", \"col\": 12}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Apex Dashboards\", \"col\": 3}}, {\"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Dashboard Profile Banner\", \"col\": 12}}, {\"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Dashboard Holidays\", \"col\": 6}}, {\"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Dashboard Analog Clock\", \"col\": 6}}, {\"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Dashboard Clock\", \"col\": 6}}, {\"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Dashboard Notes\", \"col\": 12}}]",
+ "content": "[{\"type\": \"Custom HTML Block\", \"data\": {\"col\": 12, \"customHTMLBlockName\": \"Dashboard Profile Banner\"}}, {\"type\": \"Custom HTML Block\", \"data\": {\"col\": 4, \"customHTMLBlockName\": \"Dashboard Clock\"}}, {\"type\": \"Custom HTML Block\", \"data\": {\"col\": 4, \"customHTMLBlockName\": \"Dashboard Clock China\"}}, {\"type\": \"Custom HTML Block\", \"data\": {\"col\": 4, \"customHTMLBlockName\": \"Dashboard Clock Germany\"}}, {\"type\": \"Custom HTML Block\", \"data\": {\"col\": 6, \"customHTMLBlockName\": \"Dashboard Holidays\"}}, {\"type\": \"Custom HTML Block\", \"data\": {\"col\": 6, \"customHTMLBlockName\": \"Dashboard Analog Clock\"}}, {\"type\": \"Custom HTML Block\", \"data\": {\"col\": 12, \"customHTMLBlockName\": \"Dashboard Notes\"}}]",
  "creation": "2025-12-01 18:27:41.438504",
  "custom_blocks": [
-  {
-   "custom_block_name": "Dashboard Profile Banner",
-   "label": "Dashboard Profile Banner"
-  },
-  {
-   "custom_block_name": "Dashboard Holidays",
-   "label": "Dashboard Holidays"
-  },
-  {
-   "custom_block_name": "Dashboard Clock",
-   "label": "Dashboard Clock"
-  },
-  {
-   "custom_block_name": "Dashboard Analog Clock",
-   "label": "Dashboard Analog Clock"
-  },
-  {
-   "custom_block_name": "Dashboard Notes",
-   "label": "Dashboard Notes"
-  }
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {}
  ],
  "docstatus": 0,
  "doctype": "Workspace",
@@ -44,7 +31,7 @@
    "type": "Link"
   }
  ],
- "modified": "2025-12-02 00:03:15.938735",
+ "modified": "2025-12-02 16:22:19.586105",
  "modified_by": "Administrator",
  "module": "Apex Dashboard",
  "name": "Apex Dashboards Hub",

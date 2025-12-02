@@ -269,6 +269,8 @@ fixtures = [
 			["name", "in", [
 				"Dashboard Profile Banner",
 				"Dashboard Clock",
+				"Dashboard Clock China",
+				"Dashboard Clock Germany",
 				"Dashboard Analog Clock",
 				"Dashboard Holidays",
 				"Dashboard Support",
