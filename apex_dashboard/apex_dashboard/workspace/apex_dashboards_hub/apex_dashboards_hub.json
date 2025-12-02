@@ -1,15 +1,8 @@
 {
  "charts": [],
- "content": "[{\"type\": \"Custom HTML Block\", \"data\": {\"col\": 12, \"customHTMLBlockName\": \"Dashboard Profile Banner\"}}, {\"type\": \"Custom HTML Block\", \"data\": {\"col\": 4, \"customHTMLBlockName\": \"Dashboard Clock Egypt\"}}, {\"type\": \"Custom HTML Block\", \"data\": {\"col\": 4, \"customHTMLBlockName\": \"Dashboard Clock China\"}}, {\"type\": \"Custom HTML Block\", \"data\": {\"col\": 4, \"customHTMLBlockName\": \"Dashboard Clock Germany\"}}, {\"type\": \"Custom HTML Block\", \"data\": {\"col\": 6, \"customHTMLBlockName\": \"Dashboard Holidays\"}}, {\"type\": \"Custom HTML Block\", \"data\": {\"col\": 6, \"customHTMLBlockName\": \"Dashboard Notes\"}}]",
+ "content": "[{\"type\": \"Shortcut\", \"data\": {\"type\": \"Page\", \"label\": \"Dashboard Home\", \"link_to\": \"dashboard_home\", \"doc_view\": \"\", \"color\": \"#667eea\", \"icon\": \"home\", \"format\": \"{}\"}}]",
  "creation": "2025-12-01 18:27:41.438504",
- "custom_blocks": [
-  {},
-  {},
-  {},
-  {},
-  {},
-  {}
- ],
+ "custom_blocks": [],
  "docstatus": 0,
  "doctype": "Workspace",
  "hide_custom": 0,
@@ -30,7 +23,7 @@
    "type": "Link"
   }
  ],
- "modified": "2025-12-02 22:35:18.551492",
+ "modified": "2025-12-02 23:11:23.193989",
  "modified_by": "Administrator",
  "module": "Apex Dashboard",
  "name": "Apex Dashboards Hub",
