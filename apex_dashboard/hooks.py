@@ -188,9 +188,22 @@ doc_events = {
 # Overriding Methods
 # ------------------------------
 #
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "apex_dashboard.event.get_events"
-# }
+override_whitelisted_methods = {
+	"frappe.desk.desktop.get_desktop_page": "apex_dashboard.overrides.get_desktop_page_override"
+}
+
+# Boot session hook to apply monkey patch
+# ------------------------------
+boot_session = "apex_dashboard.overrides.apply_monkey_patch"
+
+# App startup hook
+# ------------------------------
+after_app_install = "apex_dashboard.overrides.apply_monkey_patch"
+after_migrate = ["apex_dashboard.install.after_migrate", "apex_dashboard.overrides.apply_monkey_patch"]
+
+# Request hooks - apply patch on every request
+# ------------------------------
+before_request = ["apex_dashboard.overrides.apply_monkey_patch"]
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
@@ -268,12 +281,10 @@ fixtures = [
 		"filters": [
 			["name", "in", [
 				"Dashboard Profile Banner",
-				"Dashboard Clock",
+				"Dashboard Clock Egypt",
 				"Dashboard Clock China",
 				"Dashboard Clock Germany",
-				"Dashboard Analog Clock",
 				"Dashboard Holidays",
-				"Dashboard Support",
 				"Dashboard Notes"
 			]]
 		]

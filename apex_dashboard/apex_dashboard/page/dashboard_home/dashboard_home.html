@@ -1,0 +1,115 @@
+<div class="dashboard-home-container">
+    <!-- Profile Banner -->
+    <div class="dashboard-widget" style="grid-column: span 12;">
+        <div class="profile-card">
+            <div class="profile-cover" style="background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+            <div class="profile-content">
+                <div class="profile-avatar">
+                    <img id="user-avatar" src="" alt="User">
+                </div>
+                <div class="profile-details">
+                    <h2 id="user-name">Loading...</h2>
+                    <p id="user-email">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Digital Clock (Egypt) -->
+    <div class="dashboard-widget" style="grid-column: span 4;">
+        <div class="digital-clock-card">
+            <div class="clock-label">🇪🇬 Cairo, Egypt</div>
+            <div class="clock-time" id="digital-time">--:--:-- --</div>
+            <div class="clock-date" id="digital-date">---, -- --- ----</div>
+        </div>
+    </div>
+
+    <!-- Analog Clock (China) -->
+    <div class="dashboard-widget" style="grid-column: span 4;">
+        <div class="world-clock-widget china-clock">
+            <div class="clock-label">🇨🇳 Beijing, China</div>
+            <div class="analog-clock-small">
+                <div class="clock-face-small">
+                    <div class="hour-hand-small" id="china-hour"></div>
+                    <div class="minute-hand-small" id="china-minute"></div>
+                    <div class="second-hand-small" id="china-second"></div>
+                    <div class="center-dot"></div>
+                </div>
+            </div>
+            <div class="timezone-info">UTC+8</div>
+        </div>
+    </div>
+
+    <!-- Analog Clock (Germany) -->
+    <div class="dashboard-widget" style="grid-column: span 4;">
+        <div class="world-clock-widget germany-clock">
+            <div class="clock-label">🇩🇪 Berlin, Germany</div>
+            <div class="analog-clock-small">
+                <div class="clock-face-small">
+                    <div class="hour-hand-small" id="germany-hour"></div>
+                    <div class="minute-hand-small" id="germany-minute"></div>
+                    <div class="second-hand-small" id="germany-second"></div>
+                    <div class="center-dot"></div>
+                </div>
+            </div>
+            <div class="timezone-info">UTC+1</div>
+        </div>
+    </div>
+
+    <!-- Holidays -->
+    <div class="dashboard-widget" style="grid-column: span 6;">
+        <div class="holidays-widget">
+            <h3>Upcoming Holidays (Egypt)</h3>
+            <div class="carousel-container">
+                <button class="carousel-btn prev" id="prev-btn">‹</button>
+                <div class="holiday-card" id="holiday-display">
+                    <div class="holiday-name">Loading...</div>
+                    <div class="holiday-date">...</div>
+                </div>
+                <button class="carousel-btn next" id="next-btn">›</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analog Clock (Main) -->
+    <div class="dashboard-widget" style="grid-column: span 6;">
+        <div class="analog-clock-widget">
+            <div class="clock-container">
+                <div class="clock-face">
+                    <svg class="markers-svg" viewBox="0 0 200 200">
+                        <g id="minute-marks"></g>
+                    </svg>
+                    <div class="number" style="--angle: 0deg; --distance: 75px;">12</div>
+                    <div class="number" style="--angle: 30deg; --distance: 75px;">1</div>
+                    <div class="number" style="--angle: 60deg; --distance: 75px;">2</div>
+                    <div class="number" style="--angle: 90deg; --distance: 75px;">3</div>
+                    <div class="number" style="--angle: 120deg; --distance: 75px;">4</div>
+                    <div class="number" style="--angle: 150deg; --distance: 75px;">5</div>
+                    <div class="number" style="--angle: 180deg; --distance: 75px;">6</div>
+                    <div class="number" style="--angle: 210deg; --distance: 75px;">7</div>
+                    <div class="number" style="--angle: 240deg; --distance: 75px;">8</div>
+                    <div class="number" style="--angle: 270deg; --distance: 75px;">9</div>
+                    <div class="number" style="--angle: 300deg; --distance: 75px;">10</div>
+                    <div class="number" style="--angle: 330deg; --distance: 75px;">11</div>
+                    <div class="brand-text">QUARTZ</div>
+                    <div class="hour-hand" id="hour-hand"></div>
+                    <div class="minute-hand" id="minute-hand"></div>
+                    <div class="second-hand" id="second-hand"></div>
+                    <div class="center-circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="dashboard-widget" style="grid-column: span 12;">
+        <div class="apex-notes-widget">
+            <div class="notes-title"><span>📝</span><span>Quick Notes</span></div>
+            <textarea class="notes-textarea" id="apex-notes-area" placeholder="Write your notes here..."></textarea>
+            <div class="notes-actions">
+                <button class="btn btn-xs btn-default" id="save-notes-btn">Save</button>
+                <button class="btn btn-xs btn-default" id="clear-notes-btn">Clear</button>
+            </div>
+        </div>
+    </div>
+</div>
