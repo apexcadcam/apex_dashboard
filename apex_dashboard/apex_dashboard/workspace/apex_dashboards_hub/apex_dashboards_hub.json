@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"type\": \"Shortcut\", \"data\": {\"type\": \"Page\", \"label\": \"Dashboard Home\", \"link_to\": \"dashboard_home\", \"doc_view\": \"\", \"color\": \"#667eea\", \"icon\": \"home\", \"format\": \"{}\"}}]",
+ "content": "[{\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Dashboard Home\"}}]",
  "creation": "2025-12-01 18:27:41.438504",
  "custom_blocks": [],
  "docstatus": 0,
@@ -23,7 +23,7 @@
    "type": "Link"
   }
  ],
- "modified": "2025-12-02 23:11:23.193989",
+ "modified": "2025-12-02 23:15:39.316098",
  "modified_by": "Administrator",
  "module": "Apex Dashboard",
  "name": "Apex Dashboards Hub",
@@ -37,8 +37,10 @@
   {
    "color": "Blue",
    "doc_view": "",
-   "label": "Apex Dashboards",
-   "link_to": "apex_dashboards",
+   "format": "{}",
+   "icon": "home",
+   "label": "Dashboard Home",
+   "link_to": "dashboard_home",
    "type": "Page"
   }
  ],
