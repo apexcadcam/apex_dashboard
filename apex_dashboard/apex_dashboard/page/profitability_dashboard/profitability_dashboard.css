@@ -105,26 +105,30 @@
 }
 
 .metric-label {
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     color: var(--text-secondary);
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     display: block;
     font-weight: 600;
+    line-height: 1.4;
 }
 
 .metric-value {
-    font-size: 28px;
+    font-size: 22px;
     font-weight: 700;
     color: var(--text-primary);
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    word-wrap: break-word;
+    line-height: 1.2;
 }
 
 .metric-subvalue {
-    font-size: 14px;
+    font-size: 12px;
     color: var(--text-secondary);
+    line-height: 1.4;
 }
 
 /* Theme Colors */
