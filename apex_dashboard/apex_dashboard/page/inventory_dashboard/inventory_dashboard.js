@@ -32,9 +32,6 @@ class InventoryDashboard {
 					<button class="btn-glass" id="refresh-btn">
 						<i class="fa fa-refresh"></i>
 					</button>
-					<button class="btn-glass" id="config-btn">
-						<i class="fa fa-cog"></i>
-					</button>
 				</div>
 			</div>
 
@@ -76,10 +73,6 @@ class InventoryDashboard {
 
         this.wrapper.find('#refresh-btn').on('click', () => {
             this.load_data();
-        });
-
-        this.wrapper.find('#config-btn').on('click', () => {
-            frappe.set_route('Form', 'Apex Dashboard Config', 'Apex Dashboard Config');
         });
     }
 

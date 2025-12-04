@@ -17,11 +17,20 @@ class ExpenseDashboard {
 
 		const TEMPLATE = `
 		<div class="expense-dashboard dashboard-template">
+			<!-- Top Control Bar: Hub + Refresh + Filters -->
+			<div class="top-control-bar">
+				<button class="btn-glass btn-compact" id="back-btn">
+					<i class="fa fa-arrow-left"></i> Hub
+				</button>
+				<button class="btn-glass btn-compact" id="refresh-btn">
+					<i class="fa fa-refresh"></i>
+				</button>
+				<!-- Filters will be injected here by Frappe -->
+			</div>
+			
+			<!-- Dashboard Header: Title + Total -->
 			<div class="dashboard-header">
 				<div class="header-content">
-					<button class="btn-glass" id="back-btn">
-						<i class="fa fa-arrow-left"></i> Hub
-					</button>
 					<div class="header-text">
 						<h1>Expenses Overview</h1>
 						<p class="subtitle">Track your company expenses</p>
@@ -32,12 +41,6 @@ class ExpenseDashboard {
 						<span class="label" style="font-size: 12px; color: #9ca3af; display: block;">Total Expenses</span>
 						<span class="value" id="header-total-expense" style="font-size: 20px; font-weight: bold;">Loading...</span>
 					</div>
-					<button class="btn-glass" id="refresh-btn">
-						<i class="fa fa-refresh"></i>
-					</button>
-					<button class="btn-glass" id="config-btn">
-						<i class="fa fa-cog"></i>
-					</button>
 				</div>
 			</div>
 
@@ -68,8 +71,32 @@ class ExpenseDashboard {
 
 		this.format_currency = this.format_currency.bind(this);
 		this.setup_filters();
+		this.move_filters_to_top_bar();
 		this.bind_events();
 		this.load_data();
+	}
+
+	move_filters_to_top_bar() {
+		// Move Frappe's page-form filters to our custom top bar
+		setTimeout(() => {
+			const pageForm = this.page.$page_form;
+			const refreshBtn = this.wrapper.find('#refresh-btn');
+			
+			if (pageForm && refreshBtn.length) {
+				// Insert form fields after refresh button
+				pageForm.insertAfter(refreshBtn);
+				pageForm.addClass('inline-filters');
+				
+				// Make form fields display inline
+				pageForm.find('.form-group').each(function() {
+					$(this).css({
+						'display': 'inline-block',
+						'margin-right': '10px',
+						'margin-bottom': '0'
+					});
+				});
+			}
+		}, 100);
 	}
 
 	bind_events() {
@@ -79,10 +106,6 @@ class ExpenseDashboard {
 
 		this.wrapper.find('#refresh-btn').on('click', () => {
 			this.load_data();
-		});
-
-		this.wrapper.find('#config-btn').on('click', () => {
-			frappe.set_route('Form', 'Apex Dashboard Config', 'Apex Dashboard Config');
 		});
 	}
 

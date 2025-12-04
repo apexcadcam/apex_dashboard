@@ -38,9 +38,6 @@ class EquityDashboard {
                     </div>
                 </div>
                 <div class="header-actions">
-                    <div class="filter-wrapper">
-                        <!-- Filters injected here -->
-                    </div>
                     <div class="total-card glass-card">
                         <span class="label">Total Equity</span>
                         <span class="value" id="total-value">Loading...</span>
@@ -71,53 +68,35 @@ class EquityDashboard {
     }
 
     setup_filters() {
-        const filterWrapper = this.wrapper.find('.filter-wrapper');
-
-        // Company Select
-        this.companySelect = $(`<select class="form-control input-sm" style="width: 140px; display: inline-block; margin-right: 10px;">`)
-            .appendTo(filterWrapper);
-
-        // Period Select
-        this.periodSelect = $(`<select class="form-control input-sm" style="width: 120px; display: inline-block;">`)
-            .appendTo(filterWrapper);
-
-        const periods = ['This Month', 'Last Month', 'This Year', 'Last Year', 'All Time'];
-        periods.forEach(p => {
-            this.periodSelect.append($('<option>', { value: p, text: p }));
+        // Company filter
+        this.page.add_field({
+            fieldname: 'company',
+            label: __('Company'),
+            fieldtype: 'Link',
+            options: 'Company',
+            default: frappe.defaults.get_user_default('Company'),
+            change: () => this.fetch_data()
         });
 
-        // Set default to All Time as per user preference for history
-        this.periodSelect.val('All Time');
-
-        // Populate companies
-        frappe.call({
-            method: 'frappe.client.get_list',
-            args: { doctype: 'Company', fields: ['name'] },
-            callback: (r) => {
-                if (r.message) {
-                    r.message.forEach(c => {
-                        this.companySelect.append($('<option>', {
-                            value: c.name,
-                            text: c.name,
-                            selected: c.name === frappe.defaults.get_user_default('Company')
-                        }));
-                    });
-                }
-            }
+        // Period filter
+        this.page.add_field({
+            fieldname: 'period',
+            label: __('Period'),
+            fieldtype: 'Select',
+            options: ['This Month', 'Last Month', 'This Year', 'Last Year', 'All Time'],
+            default: 'All Time',
+            change: () => this.fetch_data()
         });
     }
 
     bind_events() {
         this.wrapper.find('#refresh-btn').on('click', () => this.fetch_data());
-        this.wrapper.find('#back-btn').on('click', () => window.history.back());
-
-        this.companySelect.on('change', () => this.fetch_data());
-        this.periodSelect.on('change', () => this.fetch_data());
+        this.wrapper.find('#back-btn').on('click', () => frappe.set_route('apex_dashboards'));
     }
 
     fetch_data() {
-        const company = this.companySelect.val() || frappe.defaults.get_user_default('Company');
-        const period = this.periodSelect.val() || 'All Time';
+        const company = this.page.fields_dict.company.get_value() || frappe.defaults.get_user_default('Company');
+        const period = this.page.fields_dict.period.get_value() || 'All Time';
 
         this.show_loader(true);
 

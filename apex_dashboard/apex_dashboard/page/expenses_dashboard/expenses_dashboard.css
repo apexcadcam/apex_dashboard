@@ -37,6 +37,68 @@
 	background: transparent;
 }
 
+/* Top Control Bar: Hub + Refresh + Filters */
+.top-control-bar {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 20px;
+	padding: 0 10px;
+	flex-wrap: wrap;
+}
+
+.top-control-bar .btn-compact {
+	padding: 8px 14px;
+	font-size: 13px;
+	min-width: 80px;
+	background: rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 6px;
+	color: var(--text-secondary);
+	cursor: pointer;
+	transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	white-space: nowrap;
+}
+
+.top-control-bar .btn-compact:hover {
+	background: rgba(255, 255, 255, 0.2);
+	color: var(--text-primary);
+}
+
+.top-control-bar .inline-filters {
+	display: inline-flex !important;
+	align-items: center;
+	gap: 10px;
+	margin-left: 0;
+	vertical-align: middle;
+}
+
+.top-control-bar .inline-filters .form-group {
+	display: inline-block !important;
+	margin-bottom: 0 !important;
+	margin-right: 10px !important;
+	vertical-align: middle;
+}
+
+.top-control-bar .inline-filters .frappe-control {
+	display: inline-block !important;
+	margin-bottom: 0 !important;
+	width: auto !important;
+}
+
+.top-control-bar .inline-filters .clearfix {
+	display: inline-block !important;
+}
+
+.top-control-bar .inline-filters input,
+.top-control-bar .inline-filters select {
+	min-width: 140px !important;
+	max-width: 180px !important;
+	display: inline-block !important;
+}
 
 /* Header */
 .dashboard-header {
@@ -310,14 +372,67 @@
 	border-left: 4px solid #f97316 !important;
 }
 
-/* Mobile */
+/* Mobile - Responsive Layout */
 @media (max-width: 768px) {
+	/* Dashboard Grid */
 	.expense-dashboard .dashboard-grid {
 		grid-template-columns: 1fr;
 	}
 
+	/* Header - Mobile Layout */
+	.dashboard-header {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 15px;
+		padding: 0;
+	}
+
+	.header-content {
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: 10px;
+	}
+
 	.header-content h1 {
 		font-size: 20px;
+		order: 2;
+	}
+
+	.subtitle {
+		font-size: 12px;
+		order: 3;
+	}
+
+	#back-btn {
+		align-self: flex-start;
+		order: 1;
+		font-size: 12px;
+		padding: 6px 10px;
+	}
+
+	.header-actions {
+		justify-content: center;
+		gap: 10px;
+		order: 4;
+	}
+
+	.total-card {
+		flex: 1;
+		max-width: 280px;
+		padding: 8px 15px;
+	}
+
+	.total-card .label {
+		font-size: 11px !important;
+	}
+
+	.total-card .value {
+		font-size: 16px !important;
+	}
+
+	#refresh-btn {
+		padding: 8px 12px;
 	}
 
 	.total-expense-card .value {

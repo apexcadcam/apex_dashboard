@@ -22,27 +22,30 @@ class LiquidityDashboard {
 
         const TEMPLATE = `
 		<div class="liquidity-dashboard dashboard-template">
+			<!-- Top Control Bar: Hub + Refresh + Filters -->
+			<div class="top-control-bar">
+				<button class="btn-glass btn-compact" id="back-btn">
+					<i class="fa fa-arrow-left"></i> Hub
+				</button>
+				<button class="btn-glass btn-compact" id="refresh-btn">
+					<i class="fa fa-refresh"></i>
+				</button>
+				<!-- Filters will be injected here by Frappe -->
+			</div>
+			
+			<!-- Dashboard Header: Title + Total -->
 			<div class="dashboard-header">
 				<div class="header-content">
-					<button class="btn-glass" id="back-btn">
-						<i class="fa fa-arrow-left"></i> Hub
-					</button>
 					<div class="header-text">
 						<h1>Liquidity Overview</h1>
 						<p class="subtitle">Real-time Cash & Bank Balances</p>
 					</div>
 				</div>
 				<div class="header-actions">
-					<div class="total-card" style="padding: 10px 20px; min-width: 200px;">
-						<span class="label" style="font-size: 12px; color: #9ca3af; display: block;">Total Liquidity</span>
-						<span class="value" id="header-total-liquidity" style="font-size: 20px; font-weight: bold;">Loading...</span>
+					<div class="total-card-full">
+						<span class="total-label-full">TOTAL LIQUIDITY</span>
+						<span class="total-value-full" id="header-total-liquidity">Loading...</span>
 					</div>
-					<button class="btn-glass" id="refresh-btn">
-						<i class="fa fa-refresh"></i>
-					</button>
-					<button class="btn-glass" id="config-btn">
-						<i class="fa fa-cog"></i>
-					</button>
 				</div>
 			</div>
 
@@ -112,8 +115,32 @@ class LiquidityDashboard {
         this.chart = null;
 
         this.setup_filters();
+        this.move_filters_to_top_bar();
         this.bind_events();
         this.load_data();
+    }
+
+    move_filters_to_top_bar() {
+        // Move Frappe's page-form filters to our custom top bar
+        setTimeout(() => {
+            const pageForm = this.page.$page_form;
+            const refreshBtn = this.wrapper.find('#refresh-btn');
+            
+            if (pageForm && refreshBtn.length) {
+                // Insert form fields after refresh button
+                pageForm.insertAfter(refreshBtn);
+                pageForm.addClass('inline-filters');
+                
+                // Make form fields display inline
+                pageForm.find('.form-group').each(function() {
+                    $(this).css({
+                        'display': 'inline-block',
+                        'margin-right': '10px',
+                        'margin-bottom': '0'
+                    });
+                });
+            }
+        }, 100);
     }
 
     bind_events() {
@@ -123,10 +150,6 @@ class LiquidityDashboard {
 
         this.wrapper.find('#refresh-btn').on('click', () => {
             this.load_data();
-        });
-
-        this.wrapper.find('#config-btn').on('click', () => {
-            frappe.set_route('Form', 'Apex Dashboard Config', 'Apex Dashboard Config');
         });
 
         // Filter buttons for chart
@@ -260,9 +283,17 @@ class LiquidityDashboard {
             this.wrapper.find('#dashboard-content').hide();
         } else {
             this.wrapper.find('#dashboard-loader').hide();
-            this.wrapper.find('#metrics-section').fadeIn();
-            this.wrapper.find('#chart-section').fadeIn();
-            this.wrapper.find('#dashboard-content').fadeIn();
+            this.wrapper.find('#metrics-section').show();
+            this.wrapper.find('#chart-section').show();
+            this.wrapper.find('#dashboard-content').show();
+            
+            // Force chart section visibility on mobile
+            setTimeout(() => {
+                const chartSection = this.wrapper.find('#chart-section')[0];
+                const bankChart = this.wrapper.find('#bank-chart')[0];
+                if (chartSection) chartSection.style.display = 'block';
+                if (bankChart) bankChart.style.display = 'block';
+            }, 50);
         }
     }
 
@@ -410,7 +441,7 @@ class LiquidityDashboard {
             colors: chartData.colors,
             chart: {
                 type: 'donut',
-                height: 350,
+                height: 450,
                 background: 'transparent',
                 fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
             },
@@ -419,9 +450,23 @@ class LiquidityDashboard {
             },
             legend: {
                 position: 'bottom',
+                horizontalAlign: 'center',
+                floating: false,
+                fontSize: '13px',
                 labels: {
-                    colors: '#1a1a1a'
-                }
+                    colors: this.get_text_color(),  // Dynamic color for theme
+                    useSeriesColors: false
+                },
+                markers: {
+                    width: 10,
+                    height: 10,
+                    radius: 2
+                },
+                itemMargin: {
+                    horizontal: 12,
+                    vertical: 5
+                },
+                offsetY: 5
             },
             dataLabels: {
                 enabled: true,
@@ -430,7 +475,7 @@ class LiquidityDashboard {
                 },
                 style: {
                     fontSize: '12px',
-                    colors: ['#1a1a1a']
+                    colors: ['#ffffff']  // Always white on colored segments
                 }
             },
             plotOptions: {
@@ -442,12 +487,12 @@ class LiquidityDashboard {
                             name: {
                                 show: true,
                                 fontSize: '16px',
-                                color: '#1a1a1a'
+                                color: this.get_text_color()  // Dynamic color
                             },
                             value: {
                                 show: true,
                                 fontSize: '20px',
-                                color: '#1a1a1a',
+                                color: this.get_text_color(),  // Dynamic color
                                 formatter: (val) => {
                                     return this.format_currency(val, 'EGP');
                                 }
@@ -456,7 +501,7 @@ class LiquidityDashboard {
                                 show: true,
                                 label: 'Total',
                                 fontSize: '14px',
-                                color: '#666666',
+                                color: this.get_secondary_text_color(),  // Dynamic secondary color
                                 formatter: () => {
                                     return this.format_currency(data.metrics.total_liquidity, 'EGP');
                                 }
@@ -626,5 +671,17 @@ class LiquidityDashboard {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
+    }
+
+    get_text_color() {
+        // Check if dark theme is enabled
+        const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark';
+        return isDarkTheme ? '#ffffff' : '#1a1a1a';
+    }
+
+    get_secondary_text_color() {
+        // Check if dark theme is enabled
+        const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark';
+        return isDarkTheme ? '#9ca3af' : '#6b7280';
     }
 }
