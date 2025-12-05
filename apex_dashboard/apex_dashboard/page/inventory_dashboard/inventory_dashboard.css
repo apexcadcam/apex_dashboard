@@ -674,4 +674,93 @@
 	.item-row .item-stats {
 		text-align: left;
 	}
+
+	/* Mobile Filter Bar - Smaller to fit */
+	.inventory-dashboard .page-form,
+	.inventory-dashboard .standard-filter-section {
+		flex-wrap: nowrap !important;
+		gap: 2px !important;
+		padding: 2px 3px !important;
+	}
+	
+	.inventory-dashboard .filter-button {
+		min-width: 45px !important;
+		max-width: 60px !important;
+		padding: 3px 5px !important;
+		font-size: 9px !important;
+	}
+	
+	.inventory-dashboard .page-form .form-group {
+		min-width: 60px !important;
+		max-width: 80px !important;
+	}
+	
+	.inventory-dashboard .page-form .form-group input,
+	.inventory-dashboard .page-form .form-group select {
+		font-size: 9px !important;
+		padding: 2px 3px !important;
+		width: 60px !important;
+	}
+	
+	.inventory-dashboard .page-form .form-group .control-label {
+		display: none !important;
+	}
+	
+	/* Content Cards - Smaller on mobile */
+	.inventory-dashboard .category-card {
+		padding: 15px !important;
+	}
+	
+	.inventory-dashboard .item-row {
+		padding: 10px !important;
+		font-size: 12px !important;
+	}
+}
+
+/* Custom Filter Buttons (Hub + Refresh) */
+.inventory-dashboard .filter-button {
+	margin-right: 10px !important;
+	background: var(--btn-default-bg) !important;
+	border: 1px solid var(--border-color) !important;
+	color: var(--text-color) !important;
+	padding: 6px 12px !important;
+	font-size: 13px !important;
+	border-radius: 4px !important;
+	cursor: pointer !important;
+	transition: all 0.2s !important;
+}
+
+.inventory-dashboard .filter-button:hover {
+	background: var(--btn-default-hover-bg) !important;
+	border-color: var(--primary) !important;
+}
+
+/* Standard Filter Section Styling - Only for filter bar */
+.inventory-dashboard .page-form,
+.inventory-dashboard .standard-filter-section {
+	display: flex !important;
+	align-items: center !important;
+	gap: 8px !important;
+	flex-wrap: wrap !important;
+	margin-bottom: 15px !important;
+	padding: 5px 10px !important;
+}
+
+.inventory-dashboard .page-form .form-group,
+.inventory-dashboard .standard-filter-section .form-group {
+	margin-bottom: 0 !important;
+	margin-right: 0 !important;
+}
+
+/* Header Total Card - Left aligned */
+.inventory-dashboard .dashboard-header .total-card {
+	text-align: left !important;
+}
+
+.inventory-dashboard .dashboard-header .total-card .label {
+	text-align: left !important;
+}
+
+.inventory-dashboard .dashboard-header .total-card .value {
+	text-align: left !important;
 }

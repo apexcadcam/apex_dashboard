@@ -9,12 +9,16 @@ frappe.pages['dashboard_home'].on_page_load = function (wrapper) {
     page.$title_area.hide();
 
     // Initialize all widgets
-    initializeProfile();
-    initializeDigitalClock();
-    initializeWorldClocks();
-    initializeMainAnalogClock();
-    initializeHolidays();
-    initializeNotes();
+    try {
+        initializeProfile();
+        initializeDigitalClock();
+        initializeWorldClocks();
+        initializeMainAnalogClock();
+        initializeHolidays();
+        initializeNotes();
+    } catch (e) {
+        console.error("Error initializing dashboard widgets:", e);
+    }
 }
 
 function initializeProfile() {
@@ -31,7 +35,10 @@ function initializeProfile() {
 
         let avatar = frappe.boot.user.image || frappe.user_info(frappe.session.user).image;
         if (!avatar || avatar.includes('default-avatar')) {
-            avatar = "https://ui-avatars.com/api/?name=" + encodeURIComponent(fullName) + "&background=random";
+            // Use a simpler string concatenation to avoid potential parsing issues
+            const baseUrl = 'https://ui-avatars.com/api/';
+            const params = '?name=' + encodeURIComponent(fullName) + '&background=random';
+            avatar = baseUrl + params;
         }
         if (imgEl) imgEl.src = avatar;
     }
@@ -50,7 +57,7 @@ function initializeDigitalClock() {
         hours = hours % 12;
         hours = hours ? hours : 12;
 
-        if (timeEl) timeEl.innerHTML = `${hours}:${minutes}:${seconds} <span class="clock-ampm">${ampm}</span>`;
+        if (timeEl) timeEl.innerHTML = hours + ':' + minutes + ':' + seconds + ' <span class="clock-ampm">' + ampm + '</span>';
 
         const options = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
         if (dateEl) dateEl.textContent = now.toLocaleDateString('en-US', options);
@@ -73,15 +80,15 @@ function initializeWorldClocks() {
 
         if (hourHand) {
             const hourDeg = (hours % 12) * 30 + minutes * 0.5;
-            hourHand.style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+            hourHand.style.transform = 'translateX(-50%) rotate(' + hourDeg + 'deg)';
         }
         if (minuteHand) {
             const minuteDeg = minutes * 6;
-            minuteHand.style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+            minuteHand.style.transform = 'translateX(-50%) rotate(' + minuteDeg + 'deg)';
         }
         if (secondHand) {
             const secondDeg = seconds * 6;
-            secondHand.style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+            secondHand.style.transform = 'translateX(-50%) rotate(' + secondDeg + 'deg)';
         }
     }
 
@@ -98,15 +105,15 @@ function initializeWorldClocks() {
 
         if (hourHand) {
             const hourDeg = (hours % 12) * 30 + minutes * 0.5;
-            hourHand.style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+            hourHand.style.transform = 'translateX(-50%) rotate(' + hourDeg + 'deg)';
         }
         if (minuteHand) {
             const minuteDeg = minutes * 6;
-            minuteHand.style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+            minuteHand.style.transform = 'translateX(-50%) rotate(' + minuteDeg + 'deg)';
         }
         if (secondHand) {
             const secondDeg = seconds * 6;
-            secondHand.style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+            secondHand.style.transform = 'translateX(-50%) rotate(' + secondDeg + 'deg)';
         }
     }
 
@@ -123,19 +130,20 @@ function initializeMainAnalogClock() {
     const marksGroup = document.querySelector('#minute-marks');
 
     if (marksGroup && !marksGroup.hasChildNodes()) {
+        const ns = 'http://www.w3.org/2000/svg';
         for (let i = 0; i < 60; i++) {
             const angle = i * 6;
             const isHourMark = i % 5 === 0;
             const length = isHourMark ? 10 : 5;
             const width = isHourMark ? 2 : 1;
-            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            const line = document.createElementNS(ns, 'line');
             line.setAttribute('x1', '100');
             line.setAttribute('y1', '10');
             line.setAttribute('x2', '100');
             line.setAttribute('y2', String(10 + length));
             line.setAttribute('stroke', '#2c3e50');
             line.setAttribute('stroke-width', String(width));
-            line.setAttribute('transform', `rotate(${angle} 100 100)`);
+            line.setAttribute('transform', 'rotate(' + angle + ' 100 100)');
             marksGroup.appendChild(line);
         }
     }
@@ -148,9 +156,9 @@ function initializeMainAnalogClock() {
         const secondDegrees = ((seconds / 60) * 360);
         const minuteDegrees = ((minutes / 60) * 360) + ((seconds / 60) * 6);
         const hourDegrees = ((hours / 12) * 360) + ((minutes / 60) * 30);
-        if (secondHand) secondHand.style.transform = `translateX(-50%) rotate(${secondDegrees}deg)`;
-        if (minuteHand) minuteHand.style.transform = `translateX(-50%) rotate(${minuteDegrees}deg)`;
-        if (hourHand) hourHand.style.transform = `translateX(-50%) rotate(${hourDegrees}deg)`;
+        if (secondHand) secondHand.style.transform = 'translateX(-50%) rotate(' + secondDegrees + 'deg)';
+        if (minuteHand) minuteHand.style.transform = 'translateX(-50%) rotate(' + minuteDegrees + 'deg)';
+        if (hourHand) hourHand.style.transform = 'translateX(-50%) rotate(' + hourDegrees + 'deg)';
     }
     setInterval(updateAnalog, 1000);
     updateAnalog();
@@ -184,14 +192,14 @@ function initializeHolidays() {
     }
 
     if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
+        prevBtn.addEventListener('click', function () {
             currentIndex = (currentIndex - 1 + holidays.length) % holidays.length;
             updateDisplay();
         });
     }
 
     if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
+        nextBtn.addEventListener('click', function () {
             currentIndex = (currentIndex + 1) % holidays.length;
             updateDisplay();
         });
@@ -205,7 +213,7 @@ function initializeNotes() {
     const saveBtn = document.querySelector('#save-notes-btn');
     const clearBtn = document.querySelector('#clear-notes-btn');
     const userId = frappe.session.user;
-    const storageKey = `apex_dashboard_notes_${userId}`;
+    const storageKey = 'apex_dashboard_notes_' + userId;
 
     if (textarea) {
         const savedNotes = localStorage.getItem(storageKey) || '';

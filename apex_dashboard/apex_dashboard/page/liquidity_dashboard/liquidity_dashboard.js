@@ -22,19 +22,8 @@ class LiquidityDashboard {
 
         const TEMPLATE = `
 		<div class="liquidity-dashboard dashboard-template">
-			<!-- Top Control Bar: Hub + Refresh + Filters -->
-			<div class="top-control-bar">
-				<button class="btn-glass btn-compact" id="back-btn">
-					<i class="fa fa-arrow-left"></i> Hub
-				</button>
-				<button class="btn-glass btn-compact" id="refresh-btn">
-					<i class="fa fa-refresh"></i>
-				</button>
-				<!-- Filters will be injected here by Frappe -->
-			</div>
-			
 			<!-- Dashboard Header: Title + Total -->
-			<div class="dashboard-header">
+			<div class="dashboard-header" style="margin-top: 10px;">
 				<div class="header-content">
 					<div class="header-text">
 						<h1>Liquidity Overview</h1>
@@ -89,6 +78,12 @@ class LiquidityDashboard {
 					</div>
 				</div>
 				<div id="bank-chart"></div>
+				<!-- Total Summary Below Chart -->
+				<div class="chart-total-summary">
+					<div class="total-label">Filtered Total</div>
+					<div class="total-value" id="chart-total-value">0.00 ج.م</div>
+					<div class="filter-indicator" id="filter-indicator">All Banks</div>
+				</div>
 			</div>
 
 			<div id="dashboard-content" class="dashboard-grid" style="display: none;">
@@ -115,32 +110,86 @@ class LiquidityDashboard {
         this.chart = null;
 
         this.setup_filters();
-        this.move_filters_to_top_bar();
+        this.add_custom_buttons_to_filters();
         this.bind_events();
         this.load_data();
     }
 
-    move_filters_to_top_bar() {
-        // Move Frappe's page-form filters to our custom top bar
+    add_custom_buttons_to_filters() {
+        // Wait for Frappe to render the filters
         setTimeout(() => {
-            const pageForm = this.page.$page_form;
-            const refreshBtn = this.wrapper.find('#refresh-btn');
+            // Find the filter container (where Company and Period are)
+            const filterContainer = this.page.wrapper.find('.page-form .clearfix, .page-form').first();
             
-            if (pageForm && refreshBtn.length) {
-                // Insert form fields after refresh button
-                pageForm.insertAfter(refreshBtn);
-                pageForm.addClass('inline-filters');
+            if (filterContainer.length) {
+                // Create Hub button
+                const hubBtn = $(`
+                    <div class="form-group" style="display: inline-block; margin: 0 5px 0 0; min-width: 60px;">
+                        <button class="btn btn-default btn-sm" id="hub-btn-custom" style="padding: 5px 10px; font-size: 12px;">
+                            <i class="fa fa-arrow-left"></i> Hub
+                        </button>
+                    </div>
+                `);
                 
-                // Make form fields display inline
-                pageForm.find('.form-group').each(function() {
-                    $(this).css({
-                        'display': 'inline-block',
-                        'margin-right': '10px',
-                        'margin-bottom': '0'
+                // Create Refresh button
+                const refreshBtn = $(`
+                    <div class="form-group" style="display: inline-block; margin: 0 5px 0 0; min-width: 40px;">
+                        <button class="btn btn-default btn-sm" id="refresh-btn-custom" style="padding: 5px 10px; font-size: 12px;">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                    </div>
+                `);
+                
+                // Add click handlers
+                hubBtn.find('button').on('click', () => frappe.set_route('apex_dashboards'));
+                refreshBtn.find('button').on('click', () => this.load_data());
+                
+                // Insert at the beginning
+                filterContainer.prepend(refreshBtn);
+                filterContainer.prepend(hubBtn);
+                
+                // Make container very tight and left-aligned
+                filterContainer.css({
+                    'display': 'flex',
+                    'justify-content': 'flex-start',
+                    'align-items': 'center',
+                    'gap': '4px',
+                    'flex-wrap': 'nowrap',
+                    'padding-left': '0'
+                });
+                
+                // Make sure everything is inline and smaller  
+                filterContainer.find('.form-group').each(function(index) {
+                    const $this = $(this);
+                    
+                    // First 4 items: Hub, Refresh, Company, Period
+                    if (index < 4) {
+                        $this.css({
+                            'display': 'inline-block',
+                            'vertical-align': 'middle',
+                            'margin': '0 4px 0 0',
+                            'max-width': '105px'
+                        });
+                    } else {
+                        // Hide any extra fields initially
+                        $this.css({
+                            'display': 'none'
+                        });
+                    }
+                    
+                    // Make Company and Period inputs smaller
+                    $this.find('input, select').css({
+                        'max-width': '90px',
+                        'font-size': '12px',
+                        'padding': '5px 8px'
                     });
                 });
+                
+                console.log('✅ Hub and Refresh buttons added to filter bar');
+            } else {
+                console.error('❌ Could not find filter container');
             }
-        }, 100);
+        }, 300);
     }
 
     bind_events() {
@@ -209,7 +258,7 @@ class LiquidityDashboard {
             }
         });
 
-        // Fiscal Year Filter
+        // Fiscal Year Filter (initially hidden)
         this.page.add_field({
             fieldname: 'fiscal_year',
             label: __('Select Year'),
@@ -222,8 +271,7 @@ class LiquidityDashboard {
                 }
             }
         });
-
-        // Date range filters
+        // Date range filters (initially hidden)
         this.page.add_field({
             fieldname: 'from_date',
             label: __('From Date'),
@@ -238,7 +286,21 @@ class LiquidityDashboard {
             change: () => this.load_data()
         });
 
-        // Initialize visibility
+        // Fiscal Year Filter
+        this.page.add_field({
+            fieldname: 'fiscal_year',
+            label: __('Select Year'),
+            fieldtype: 'Link',
+            options: 'Fiscal Year',
+            change: () => {
+                const fiscal_year = this.page.fields_dict.fiscal_year.get_value();
+                if (fiscal_year) {
+                    this.load_data();
+                }
+            }
+        });
+
+        // Initialize visibility - hide conditional fields
         this.page.fields_dict.period.$input.trigger('change');
     }
 
@@ -486,13 +548,13 @@ class LiquidityDashboard {
                             show: true,
                             name: {
                                 show: true,
-                                fontSize: '16px',
-                                color: this.get_text_color()  // Dynamic color
+                                fontSize: '14px',
+                                color: this.get_text_color()
                             },
                             value: {
                                 show: true,
-                                fontSize: '20px',
-                                color: this.get_text_color(),  // Dynamic color
+                                fontSize: '18px',
+                                color: this.get_text_color(),
                                 formatter: (val) => {
                                     return this.format_currency(val, 'EGP');
                                 }
@@ -500,8 +562,8 @@ class LiquidityDashboard {
                             total: {
                                 show: true,
                                 label: 'Total',
-                                fontSize: '14px',
-                                color: this.get_secondary_text_color(),  // Dynamic secondary color
+                                fontSize: '12px',
+                                color: this.get_secondary_text_color(),
                                 formatter: () => {
                                     return this.format_currency(data.metrics.total_liquidity, 'EGP');
                                 }
@@ -526,6 +588,11 @@ class LiquidityDashboard {
                 options
             );
             this.chart.render();
+            
+            // Initialize total value below chart
+            const totalValue = this.format_currency(data.metrics.total_liquidity, 'EGP');
+            this.wrapper.find('#chart-total-value').text(totalValue);
+            this.wrapper.find('#filter-indicator').text('All Banks');
         } else {
             setTimeout(() => this.render_chart(data), 500);
         }

@@ -37,76 +37,110 @@
 	background: transparent;
 }
 
-/* Top Control Bar: Hub + Refresh + Filters */
-.top-control-bar {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	margin-bottom: 20px;
-	padding: 0 10px;
-	flex-wrap: wrap;
-}
-
-.top-control-bar .btn-compact {
-	padding: 8px 14px;
-	font-size: 13px;
-	min-width: 80px;
-	background: rgba(255, 255, 255, 0.1);
-	border: 1px solid rgba(255, 255, 255, 0.2);
-	border-radius: 6px;
-	color: var(--text-secondary);
-	cursor: pointer;
-	transition: all 0.2s;
-	display: flex;
-	align-items: center;
-	gap: 6px;
-	white-space: nowrap;
-}
-
-.top-control-bar .btn-compact:hover {
-	background: rgba(255, 255, 255, 0.2);
-	color: var(--text-primary);
-}
-
-.top-control-bar .inline-filters {
-	display: inline-flex !important;
-	align-items: center;
-	gap: 10px;
-	margin-left: 0;
-	vertical-align: middle;
-}
-
-.top-control-bar .inline-filters .form-group {
-	display: inline-block !important;
-	margin-bottom: 0 !important;
+/* Custom Filter Buttons (Hub + Refresh) */
+.filter-button {
 	margin-right: 10px !important;
-	vertical-align: middle;
+	background: var(--btn-default-bg) !important;
+	border: 1px solid var(--border-color) !important;
+	color: var(--text-color) !important;
+	padding: 6px 12px !important;
+	font-size: 13px !important;
+	border-radius: 4px !important;
+	cursor: pointer !important;
+	transition: all 0.2s !important;
 }
 
-.top-control-bar .inline-filters .frappe-control {
-	display: inline-block !important;
+.filter-button:hover {
+	background: var(--btn-default-hover-bg) !important;
+	border-color: var(--primary) !important;
+}
+
+/* Standard Filter Section Styling */
+.page-form,
+.standard-filter-section {
+	display: flex !important;
+	align-items: center !important;
+	gap: 8px !important;
+	flex-wrap: wrap !important;
+	margin-bottom: 15px !important;
+	padding: 5px 10px !important;
+}
+
+.page-form .form-group,
+.standard-filter-section .form-group {
 	margin-bottom: 0 !important;
-	width: auto !important;
+	margin-right: 0 !important;
 }
 
-.top-control-bar .inline-filters .clearfix {
-	display: inline-block !important;
-}
-
-.top-control-bar .inline-filters input,
-.top-control-bar .inline-filters select {
-	min-width: 140px !important;
-	max-width: 180px !important;
-	display: inline-block !important;
+/* Mobile - Smaller filters to fit in one row */
+@media (max-width: 768px) {
+	.expense-dashboard .page-form,
+	.expense-dashboard .standard-filter-section {
+		display: flex !important;
+		flex-wrap: nowrap !important;
+		gap: 2px !important;
+		padding: 2px 3px !important;
+		overflow-x: visible !important;
+		justify-content: flex-start !important;
+		width: 100% !important;
+	}
+	
+	.expense-dashboard .filter-button {
+		min-width: 45px !important;
+		max-width: 60px !important;
+		padding: 3px 5px !important;
+		font-size: 9px !important;
+		white-space: nowrap !important;
+		flex-shrink: 1 !important;
+		flex-grow: 0 !important;
+		border-radius: 4px !important;
+	}
+	
+	.expense-dashboard .filter-button i {
+		font-size: 9px !important;
+	}
+	
+	.expense-dashboard .page-form .form-group,
+	.expense-dashboard .standard-filter-section .form-group {
+		flex-shrink: 1 !important;
+		flex-grow: 0 !important;
+		min-width: 60px !important;
+		max-width: 80px !important;
+	}
+	
+	.expense-dashboard .page-form .form-group .frappe-control,
+	.expense-dashboard .standard-filter-section .form-group .frappe-control {
+		width: 60px !important;
+		min-width: 60px !important;
+		max-width: 80px !important;
+	}
+	
+	.expense-dashboard .page-form .form-group input,
+	.expense-dashboard .page-form .form-group select,
+	.expense-dashboard .standard-filter-section .form-group input,
+	.expense-dashboard .standard-filter-section .form-group select {
+		font-size: 9px !important;
+		padding: 2px 3px !important;
+		width: 60px !important;
+		min-width: 60px !important;
+		max-width: 80px !important;
+		border-radius: 3px !important;
+	}
+	
+	.expense-dashboard .page-form .form-group .control-label,
+	.expense-dashboard .standard-filter-section .form-group .control-label {
+		display: none !important;
+	}
 }
 
 /* Header */
 .dashboard-header {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
 	align-items: center;
 	margin-bottom: 30px;
 	padding: 0 10px;
+	gap: 20px;
 }
 
 .header-content {
@@ -151,6 +185,7 @@
 	display: flex;
 	align-items: center;
 	gap: 15px;
+	justify-content: flex-start;
 }
 
 .total-card {
@@ -160,7 +195,7 @@
 	border-radius: 16px;
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-	text-align: right;
+	text-align: left;
 }
 
 .total-card .label {
@@ -169,6 +204,7 @@
 	text-transform: uppercase;
 	letter-spacing: 0.5px;
 	color: var(--text-secondary);
+	text-align: left;
 }
 
 .total-card .value {
@@ -176,6 +212,7 @@
 	font-size: 20px;
 	font-weight: 800;
 	color: var(--text-primary);
+	text-align: left;
 }
 
 .btn-glass {

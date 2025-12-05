@@ -17,19 +17,8 @@ class ExpenseDashboard {
 
 		const TEMPLATE = `
 		<div class="expense-dashboard dashboard-template">
-			<!-- Top Control Bar: Hub + Refresh + Filters -->
-			<div class="top-control-bar">
-				<button class="btn-glass btn-compact" id="back-btn">
-					<i class="fa fa-arrow-left"></i> Hub
-				</button>
-				<button class="btn-glass btn-compact" id="refresh-btn">
-					<i class="fa fa-refresh"></i>
-				</button>
-				<!-- Filters will be injected here by Frappe -->
-			</div>
-			
 			<!-- Dashboard Header: Title + Total -->
-			<div class="dashboard-header">
+			<div class="dashboard-header" style="margin-top: 10px;">
 				<div class="header-content">
 					<div class="header-text">
 						<h1>Expenses Overview</h1>
@@ -71,32 +60,77 @@ class ExpenseDashboard {
 
 		this.format_currency = this.format_currency.bind(this);
 		this.setup_filters();
-		this.move_filters_to_top_bar();
+		this.add_custom_buttons_to_filters();
 		this.bind_events();
 		this.load_data();
 	}
 
-	move_filters_to_top_bar() {
-		// Move Frappe's page-form filters to our custom top bar
+	add_custom_buttons_to_filters() {
+		// Wait for Frappe to render the filters
 		setTimeout(() => {
-			const pageForm = this.page.$page_form;
-			const refreshBtn = this.wrapper.find('#refresh-btn');
+			// Find the filter container (where Company and Period are)
+			const filterContainer = this.page.wrapper.find('.page-form .clearfix, .page-form').first();
 			
-			if (pageForm && refreshBtn.length) {
-				// Insert form fields after refresh button
-				pageForm.insertAfter(refreshBtn);
-				pageForm.addClass('inline-filters');
+			if (filterContainer.length) {
+				// Create Hub button
+				const hubBtn = $(`
+					<div class="form-group" style="display: inline-block; margin: 0 5px 0 0; min-width: 60px;">
+						<button class="btn btn-default btn-sm" id="hub-btn-custom" style="padding: 5px 10px; font-size: 12px;">
+							<i class="fa fa-arrow-left"></i> Hub
+						</button>
+					</div>
+				`);
 				
-				// Make form fields display inline
-				pageForm.find('.form-group').each(function() {
-					$(this).css({
+				// Create Refresh button
+				const refreshBtn = $(`
+					<div class="form-group" style="display: inline-block; margin: 0 5px 0 0; min-width: 40px;">
+						<button class="btn btn-default btn-sm" id="refresh-btn-custom" style="padding: 5px 10px; font-size: 12px;">
+							<i class="fa fa-refresh"></i>
+						</button>
+					</div>
+				`);
+				
+				// Add click handlers
+				hubBtn.find('button').on('click', () => frappe.set_route('apex_dashboards'));
+				refreshBtn.find('button').on('click', () => this.load_data());
+				
+				// Insert at the beginning
+				filterContainer.prepend(refreshBtn);
+				filterContainer.prepend(hubBtn);
+				
+				// Make container very tight and left-aligned
+				filterContainer.css({
+					'display': 'flex',
+					'justify-content': 'flex-start',
+					'align-items': 'center',
+					'gap': '5px',
+					'flex-wrap': 'nowrap',
+					'padding-left': '0'
+				});
+				
+				// Make sure everything is inline and smaller
+				filterContainer.find('.form-group').each(function() {
+					const $this = $(this);
+					$this.css({
 						'display': 'inline-block',
-						'margin-right': '10px',
-						'margin-bottom': '0'
+						'vertical-align': 'middle',
+						'margin': '0 5px 0 0',
+						'max-width': '110px'
+					});
+					
+					// Make Company and Period inputs smaller
+					$this.find('input, select').css({
+						'max-width': '95px',
+						'font-size': '12px',
+						'padding': '5px 8px'
 					});
 				});
+				
+				console.log('✅ Hub and Refresh buttons added to filter bar');
+			} else {
+				console.error('❌ Could not find filter container');
 			}
-		}, 100);
+		}, 300);
 	}
 
 	bind_events() {
@@ -155,7 +189,7 @@ class ExpenseDashboard {
 			}
 		});
 
-		// Fiscal Year Filter
+		// Fiscal Year Filter (initially hidden)
 		this.page.add_field({
 			fieldname: 'fiscal_year',
 			label: __('Select Year'),
@@ -168,14 +202,22 @@ class ExpenseDashboard {
 				}
 			}
 		});
+		// Hide immediately after creation
+		if (this.page.fields_dict.fiscal_year && this.page.fields_dict.fiscal_year.$wrapper) {
+			this.page.fields_dict.fiscal_year.$wrapper.hide();
+		}
 
-		// Date range filters
+		// Date range filters (initially hidden)
 		this.page.add_field({
 			fieldname: 'from_date',
 			label: __('From Date'),
 			fieldtype: 'Date',
 			change: () => this.load_data()
 		});
+		// Hide immediately after creation
+		if (this.page.fields_dict.from_date && this.page.fields_dict.from_date.$wrapper) {
+			this.page.fields_dict.from_date.$wrapper.hide();
+		}
 
 		this.page.add_field({
 			fieldname: 'to_date',
@@ -183,6 +225,10 @@ class ExpenseDashboard {
 			fieldtype: 'Date',
 			change: () => this.load_data()
 		});
+		// Hide immediately after creation
+		if (this.page.fields_dict.to_date && this.page.fields_dict.to_date.$wrapper) {
+			this.page.fields_dict.to_date.$wrapper.hide();
+		}
 
 		// Initialize visibility
 		this.page.fields_dict.period.$input.trigger('change');

@@ -206,3 +206,211 @@
 .text-danger {
 	color: var(--danger-color) !important;
 }
+
+/* Custom Filter Buttons (Hub + Refresh) */
+.equity-dashboard .filter-button {
+	margin-right: 10px !important;
+	background: var(--btn-default-bg) !important;
+	border: 1px solid var(--border-color) !important;
+	color: var(--text-color) !important;
+	padding: 6px 12px !important;
+	font-size: 13px !important;
+	border-radius: 4px !important;
+	cursor: pointer !important;
+	transition: all 0.2s !important;
+}
+
+.equity-dashboard .filter-button:hover {
+	background: var(--btn-default-hover-bg) !important;
+	border-color: var(--primary) !important;
+}
+
+/* Standard Filter Section Styling - Only for filter bar */
+.equity-dashboard .page-form,
+.equity-dashboard .standard-filter-section {
+	display: flex !important;
+	align-items: center !important;
+	gap: 8px !important;
+	flex-wrap: wrap !important;
+	margin-bottom: 15px !important;
+	padding: 5px 10px !important;
+}
+
+.equity-dashboard .page-form .form-group,
+.equity-dashboard .standard-filter-section .form-group {
+	margin-bottom: 0 !important;
+	margin-right: 0 !important;
+}
+
+/* Header Total Card - Left aligned */
+.equity-dashboard .dashboard-header .total-card {
+	text-align: left !important;
+}
+
+.equity-dashboard .dashboard-header .total-card .label {
+	text-align: left !important;
+}
+
+.equity-dashboard .dashboard-header .total-card .value {
+	text-align: left !important;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+	/* Mobile Filter Bar - Smaller to fit */
+	.equity-dashboard .page-form,
+	.equity-dashboard .standard-filter-section {
+		flex-wrap: nowrap !important;
+		gap: 2px !important;
+		padding: 2px 3px !important;
+	}
+	
+	.equity-dashboard .filter-button {
+		min-width: 45px !important;
+		max-width: 60px !important;
+		padding: 3px 5px !important;
+		font-size: 9px !important;
+	}
+	
+	.equity-dashboard .page-form .form-group {
+		min-width: 60px !important;
+		max-width: 80px !important;
+	}
+	
+	.equity-dashboard .page-form .form-group input,
+	.equity-dashboard .page-form .form-group select {
+		font-size: 9px !important;
+		padding: 2px 3px !important;
+		width: 60px !important;
+	}
+	
+	.equity-dashboard .page-form .form-group .control-label {
+		display: none !important;
+	}
+	
+	/* Partner Cards - Compact for mobile */
+	.equity-dashboard {
+		padding: 5px !important;
+	}
+	
+	.equity-dashboard .partner-card {
+		padding: 6px !important;
+		margin: 0 3px 10px 3px !important;
+		max-width: calc(100vw - 20px) !important;
+		width: calc(100vw - 20px) !important;
+		overflow: hidden !important;
+		box-sizing: border-box !important;
+	}
+	
+	.equity-dashboard .partner-header {
+		flex-direction: column !important;
+		gap: 4px !important;
+		margin-bottom: 6px !important;
+		padding-bottom: 5px !important;
+	}
+	
+	.equity-dashboard .partner-info {
+		flex-direction: row !important;
+		gap: 4px !important;
+		align-items: center !important;
+		width: 100% !important;
+	}
+	
+	.equity-dashboard .partner-info i {
+		font-size: 11px !important;
+		padding: 4px !important;
+		flex-shrink: 0 !important;
+	}
+	
+	.equity-dashboard .partner-info h3 {
+		font-size: 10px !important;
+		word-break: break-word !important;
+		line-height: 1.2 !important;
+		overflow: hidden !important;
+		text-overflow: ellipsis !important;
+		max-width: calc(100% - 30px) !important;
+	}
+	
+	.equity-dashboard .partner-total {
+		text-align: left !important;
+		margin-top: 3px !important;
+		width: 100% !important;
+	}
+	
+	.equity-dashboard .partner-total .label {
+		font-size: 7px !important;
+		margin-bottom: 2px !important;
+	}
+	
+	.equity-dashboard .partner-total .amount {
+		font-size: 11px !important;
+		word-break: break-all !important;
+		line-height: 1.2 !important;
+		display: block !important;
+		max-width: 100% !important;
+	}
+	
+	.equity-dashboard .account-row {
+		flex-direction: column !important;
+		align-items: flex-start !important;
+		gap: 2px !important;
+		padding: 4px 0 !important;
+		font-size: 9px !important;
+		width: 100% !important;
+	}
+	
+	.equity-dashboard .account-row .account-name {
+		font-size: 9px !important;
+		word-break: break-word !important;
+		max-width: 100% !important;
+		overflow: hidden !important;
+		text-overflow: ellipsis !important;
+		display: block !important;
+	}
+	
+	.equity-dashboard .account-row .account-amount {
+		font-size: 10px !important;
+		text-align: right !important;
+		word-break: break-all !important;
+		align-self: flex-end !important;
+		max-width: 100% !important;
+		display: block !important;
+	}
+	
+	.withdrawal-item {
+		padding: 4px 0;
+		font-size: 9px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 5px;
+	}
+	
+	.withdrawal-item .withdrawal-date {
+		font-size: 8px !important;
+		flex-shrink: 0;
+	}
+	
+	.withdrawal-item .withdrawal-amount {
+		font-size: 9px !important;
+		text-align: right;
+	}
+	
+	/* Recent Withdrawals section */
+	.recent-withdrawals {
+		margin-top: 8px !important;
+		padding-top: 8px !important;
+	}
+	
+	.recent-withdrawals h4 {
+		font-size: 10px !important;
+		margin-bottom: 5px !important;
+	}
+	
+	/* Dashboard Grid */
+	.equity-dashboard .dashboard-grid {
+		grid-template-columns: 1fr !important;
+		gap: 10px !important;
+		padding: 0 !important;
+	}
+}

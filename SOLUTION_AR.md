@@ -116,3 +116,8 @@ if items:
 - الحل الدائم: إنشاء Pull Request لـ Frappe Framework لإصلاح هذا الـ bug
 - أو استخدام monkey patch في `apex_dashboard/__init__.py` (موجود حالياً)
 
+
+
+
+
+

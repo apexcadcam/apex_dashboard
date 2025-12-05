@@ -1,8 +1,37 @@
 {
  "charts": [],
- "content": "[{\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Dashboard Home\"}}]",
+ "content": "[{\"id\":\"m747A4Ub1R\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Apex Dashboards Hub</span>\",\"col\":12}},{\"id\":\"sPu2JhmkZd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Apex Dashboards\",\"col\":3}},{\"id\":\"kyOsojvkN4\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"User Profile Banner\",\"col\":12}},{\"id\":\"1VvJRuie7A\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Egypt Clock Analog\",\"col\":3}},{\"id\":\"eC3cHkZn0m\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Dashboard Notes\",\"col\":9}},{\"id\":\"L9OyH4CHu8\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"China Clock\",\"col\":6}},{\"id\":\"0Fqi4fCi47\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Germany Clock Digital\",\"col\":6}},{\"id\":\"i8xxFw959J\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Dashboard Holidays\",\"col\":12}},{\"id\":\"EfWj8IRDGf\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Egypt Weather Widget\",\"col\":12}}]",
  "creation": "2025-12-01 18:27:41.438504",
- "custom_blocks": [],
+ "custom_blocks": [
+  {
+   "custom_block_name": "User Profile Banner",
+   "label": "User Profile Banner"
+  },
+  {
+   "custom_block_name": "Egypt Clock Analog",
+   "label": "Egypt Clock Analog"
+  },
+  {
+   "custom_block_name": "Dashboard Holidays",
+   "label": "Dashboard Holidays"
+  },
+  {
+   "custom_block_name": "Dashboard Notes",
+   "label": "Dashboard Notes"
+  },
+  {
+   "custom_block_name": "Germany Clock Digital",
+   "label": "Germany Clock Digital"
+  },
+  {
+   "custom_block_name": "China Clock Digital",
+   "label": "China Clock"
+  },
+  {
+   "custom_block_name": "Egypt Weather Widget",
+   "label": "Egypt Weather Widget"
+  }
+ ],
  "docstatus": 0,
  "doctype": "Workspace",
  "hide_custom": 0,
@@ -23,8 +52,8 @@
    "type": "Link"
   }
  ],
- "modified": "2025-12-02 23:15:39.316098",
- "modified_by": "Administrator",
+ "modified": "2025-12-03 23:40:17.393814",
+ "modified_by": "gaber.apex@gmail.com\u202c",
  "module": "Apex Dashboard",
  "name": "Apex Dashboards Hub",
  "number_cards": [],
@@ -35,12 +64,10 @@
  "sequence_id": 0.0,
  "shortcuts": [
   {
-   "color": "Blue",
-   "doc_view": "",
-   "format": "{}",
-   "icon": "home",
-   "label": "Dashboard Home",
-   "link_to": "dashboard_home",
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Apex Dashboards",
+   "link_to": "apex_dashboards",
    "type": "Page"
   }
  ],

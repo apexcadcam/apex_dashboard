@@ -48,7 +48,12 @@ def get_exchange_rates():
 		frappe.cache().set_value(cache_key, rates, expires_in_sec=3600)
 		return rates
 	except Exception as e:
-		frappe.log_error(f"OpenExchangeRates Error: {str(e)}")
+		# Log error but don't fail if log fails (e.g., error message too long)
+		try:
+			error_msg = str(e)[:100]  # Truncate to 100 chars to avoid "Title too long" error
+			frappe.log_error(f"OpenExchangeRates API Error: {error_msg}", "Exchange Rates Error")
+		except:
+			pass  # Silently ignore log errors
 		return get_fallback_rates()
 
 def get_fallback_rates():

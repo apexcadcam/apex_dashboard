@@ -36,9 +36,10 @@
 /* Header */
 .dashboard-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     margin-bottom: 30px;
+    gap: 20px;
 }
 
 .header-content {
@@ -317,6 +318,54 @@
 }
 
 /* Responsive */
+/* Custom Filter Buttons (Hub + Refresh) */
+.profitability-dashboard .filter-button {
+	margin-right: 10px !important;
+	background: var(--btn-default-bg) !important;
+	border: 1px solid var(--border-color) !important;
+	color: var(--text-color) !important;
+	padding: 6px 12px !important;
+	font-size: 13px !important;
+	border-radius: 4px !important;
+	cursor: pointer !important;
+	transition: all 0.2s !important;
+}
+
+.profitability-dashboard .filter-button:hover {
+	background: var(--btn-default-hover-bg) !important;
+	border-color: var(--primary) !important;
+}
+
+/* Standard Filter Section Styling - Only for filter bar */
+.profitability-dashboard .page-form,
+.profitability-dashboard .standard-filter-section {
+	display: flex !important;
+	align-items: center !important;
+	gap: 8px !important;
+	flex-wrap: wrap !important;
+	margin-bottom: 15px !important;
+	padding: 5px 10px !important;
+}
+
+.profitability-dashboard .page-form .form-group,
+.profitability-dashboard .standard-filter-section .form-group {
+	margin-bottom: 0 !important;
+	margin-right: 0 !important;
+}
+
+/* Header Total Card - Left aligned */
+.profitability-dashboard .dashboard-header .total-card {
+	text-align: left !important;
+}
+
+.profitability-dashboard .dashboard-header .total-card .label {
+	text-align: left !important;
+}
+
+.profitability-dashboard .dashboard-header .total-card .value {
+	text-align: left !important;
+}
+
 @media (max-width: 768px) {
     .metrics-grid {
         grid-template-columns: 1fr;
@@ -325,4 +374,104 @@
     .profitability-dashboard .dashboard-grid {
         grid-template-columns: 1fr;
     }
+
+    /* Mobile - Smaller filters to fit in one row */
+	.profitability-dashboard .page-form,
+	.profitability-dashboard .standard-filter-section {
+		display: flex !important;
+		flex-wrap: nowrap !important;
+		gap: 2px !important;
+		padding: 2px 3px !important;
+		overflow-x: visible !important;
+		justify-content: flex-start !important;
+		width: 100% !important;
+	}
+	
+	.profitability-dashboard .filter-button {
+		min-width: 45px !important;
+		max-width: 60px !important;
+		padding: 3px 5px !important;
+		font-size: 9px !important;
+		white-space: nowrap !important;
+		flex-shrink: 1 !important;
+		flex-grow: 0 !important;
+		border-radius: 4px !important;
+	}
+	
+	.profitability-dashboard .filter-button i {
+		font-size: 9px !important;
+	}
+	
+	.profitability-dashboard .page-form .form-group,
+	.profitability-dashboard .standard-filter-section .form-group {
+		flex-shrink: 1 !important;
+		flex-grow: 0 !important;
+		min-width: 60px !important;
+		max-width: 80px !important;
+	}
+	
+	.profitability-dashboard .page-form .form-group .frappe-control,
+	.profitability-dashboard .standard-filter-section .form-group .frappe-control {
+		width: 60px !important;
+		min-width: 60px !important;
+		max-width: 80px !important;
+	}
+	
+	.profitability-dashboard .page-form .form-group input,
+	.profitability-dashboard .page-form .form-group select,
+	.profitability-dashboard .standard-filter-section .form-group input,
+	.profitability-dashboard .standard-filter-section .form-group select {
+		font-size: 9px !important;
+		padding: 2px 3px !important;
+		width: 60px !important;
+		min-width: 60px !important;
+		max-width: 80px !important;
+		border-radius: 3px !important;
+	}
+	
+	.profitability-dashboard .page-form .form-group .control-label,
+	.profitability-dashboard .standard-filter-section .form-group .control-label {
+		display: none !important;
+	}
+	
+	/* Content Cards - Smaller on mobile */
+	.profitability-dashboard .metric-card {
+		padding: 12px !important;
+	}
+	
+	.profitability-dashboard .metric-value {
+		font-size: 24px !important;
+	}
+	
+	.profitability-dashboard .category-card {
+		padding: 10px !important;
+	}
+	
+	.profitability-dashboard .category-body {
+		padding: 10px !important;
+	}
+	
+	.profitability-dashboard .account-row {
+		padding: 10px !important;
+		flex-direction: column;
+		align-items: flex-start !important;
+		gap: 5px;
+	}
+	
+	.profitability-dashboard .account-row .account-name {
+		font-size: 11px !important;
+		word-break: break-word;
+		max-width: 100%;
+	}
+	
+	.profitability-dashboard .account-row .account-amount {
+		font-size: 14px !important;
+		align-self: flex-end;
+	}
+	
+	.profitability-dashboard .rank-badge {
+		font-size: 16px !important;
+		width: 28px !important;
+		height: 28px !important;
+	}
 }

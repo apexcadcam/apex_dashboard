@@ -18,34 +18,37 @@
 	font-size: 28px;
 	font-weight: 700;
 	margin: 0;
-	background: linear-gradient(to right, #fff, #ccc);
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+	color: var(--text-color);
 }
 
 .subtitle {
-	color: #9ca3af;
+	color: var(--text-muted);
 	font-size: 14px;
 	margin-top: 5px;
 }
 
 /* Buttons */
 .btn-glass {
-	background: rgba(255, 255, 255, 0.1);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	color: #fff;
+	background: var(--card-bg);
+	border: 1px solid var(--border-color);
+	color: var(--text-color);
 	padding: 8px 16px;
-	border-radius: 10px;
+	border-radius: 8px;
 	cursor: pointer;
 	transition: all 0.3s ease;
 	display: flex;
 	align-items: center;
 	gap: 8px;
+	font-size: 14px;
+	font-weight: 500;
 }
 
 .btn-glass:hover {
-	background: rgba(255, 255, 255, 0.2);
+	background: #667eea;
+	color: white;
+	border-color: #667eea;
 	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
 }
 
 .suppliers-dashboard-container {
@@ -369,6 +372,20 @@
 /* ===== THEME SUPPORT ===== */
 
 /* Dark Theme */
+[data-theme="dark"] .header-text h1 {
+	color: #ffffff !important;
+}
+
+[data-theme="dark"] .subtitle {
+	color: rgba(255, 255, 255, 0.7) !important;
+}
+
+[data-theme="dark"] .btn-glass {
+	background: rgba(255, 255, 255, 0.1) !important;
+	border-color: rgba(255, 255, 255, 0.2) !important;
+	color: #ffffff !important;
+}
+
 [data-theme="dark"] .category-card-new .card-header-new,
 [data-theme="dark"] .category-card-new .card-value-new,
 [data-theme="dark"] .category-card-new .detail-name,
@@ -390,6 +407,27 @@
 }
 
 /* Light Theme */
+[data-theme="light"] .header-text h1 {
+	color: #1a1a1a !important;
+	font-weight: 700 !important;
+}
+
+[data-theme="light"] .subtitle {
+	color: #6B7280 !important;
+}
+
+[data-theme="light"] .btn-glass {
+	background: #f3f4f6 !important;
+	border-color: #e5e7eb !important;
+	color: #374151 !important;
+}
+
+[data-theme="light"] .btn-glass:hover {
+	background: #667eea !important;
+	color: white !important;
+	border-color: #667eea !important;
+}
+
 [data-theme="light"] .category-card-new .card-header-new,
 [data-theme="light"] .category-card-new .card-value-new,
 [data-theme="light"] .category-card-new .detail-name,
@@ -410,14 +448,250 @@
 	color: rgba(0, 0, 0, 0.8) !important;
 }
 
-/* Responsive Design */
+/* Custom Filter Buttons (Hub + Refresh) */
+.suppliers-dashboard-container .filter-button {
+	margin-right: 10px !important;
+	background: var(--btn-default-bg) !important;
+	border: 1px solid var(--border-color) !important;
+	color: var(--text-color) !important;
+	padding: 6px 12px !important;
+	font-size: 13px !important;
+	border-radius: 4px !important;
+	cursor: pointer !important;
+	transition: all 0.2s !important;
+}
+
+.suppliers-dashboard-container .filter-button:hover {
+	background: var(--btn-default-hover-bg) !important;
+	border-color: var(--primary) !important;
+}
+
+/* Standard Filter Section Styling - Only for filter bar */
+.suppliers-dashboard-container .page-form,
+.suppliers-dashboard-container .standard-filter-section {
+	display: flex !important;
+	align-items: center !important;
+	gap: 8px !important;
+	flex-wrap: wrap !important;
+	margin-bottom: 15px !important;
+	padding: 5px 10px !important;
+}
+
+.suppliers-dashboard-container .page-form .form-group,
+.suppliers-dashboard-container .standard-filter-section .form-group {
+	margin-bottom: 0 !important;
+	margin-right: 0 !important;
+}
+
+/* Header Total Card - Left aligned */
+.suppliers-dashboard-container .dashboard-header .total-card {
+	text-align: left !important;
+}
+
+.suppliers-dashboard-container .dashboard-header .total-card .label {
+	text-align: left !important;
+}
+
+.suppliers-dashboard-container .dashboard-header .total-card .value {
+	text-align: left !important;
+}
+
+/* Responsive Design for Mobile */
 @media (max-width: 768px) {
+	/* Mobile Filter Bar - Smaller to fit */
+	.suppliers-dashboard-container .page-form,
+	.suppliers-dashboard-container .standard-filter-section {
+		flex-wrap: nowrap !important;
+		gap: 2px !important;
+		padding: 2px 3px !important;
+	}
+	
+	.suppliers-dashboard-container .filter-button {
+		min-width: 45px !important;
+		max-width: 60px !important;
+		padding: 3px 5px !important;
+		font-size: 9px !important;
+	}
+	
+	.suppliers-dashboard-container .page-form .form-group {
+		min-width: 60px !important;
+		max-width: 80px !important;
+	}
+	
+	.suppliers-dashboard-container .page-form .form-group input,
+	.suppliers-dashboard-container .page-form .form-group select {
+		font-size: 9px !important;
+		padding: 2px 3px !important;
+		width: 60px !important;
+	}
+	
+	.suppliers-dashboard-container .page-form .form-group .control-label {
+		display: none !important;
+	}
+	
+
+	/* Dashboard Container */
+	.suppliers-dashboard-container {
+		padding: 10px;
+	}
+
+	/* Header */
+	.dashboard-header {
+		flex-direction: column;
+	}
+	
+	/* Header Total Card - Smaller on mobile */
+	.dashboard-header .total-card {
+		max-width: 100% !important;
+		padding: 8px 15px !important;
+	}
+	
+	.dashboard-header .total-card .label {
+		font-size: 10px !important;
+	}
+	
+	.dashboard-header .total-card .value {
+		font-size: 16px !important;
+		word-break: break-all;
+	}
+	
+	/* Content Total Cards - Smaller fonts on mobile */
+	.total-card .card-header-new {
+		font-size: 16px !important;
+	}
+	
+	.total-card .card-value-new {
+		font-size: 28px !important;
+		word-break: break-all;
+	}
+	
+	.breakdown-item {
+		font-size: 12px !important;
+	}
+	
+	.exchange-rates {
+		font-size: 11px !important;
+		gap: 15px;
+		padding: 15px;
+	}
+
+	.header-content {
+		width: 100%;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
+	}
+
+	.header-text h1 {
+		font-size: 20px;
+	}
+
+	.subtitle {
+		font-size: 12px;
+	}
+
+	.header-actions {
+		width: 100%;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.total-card {
+		width: 100%;
+		text-align: center;
+	}
+
+	.btn-glass {
+		width: 100%;
+		justify-content: center;
+	}
+
+	/* Summary Cards */
 	.summary-cards {
 		grid-template-columns: 1fr;
+		gap: 15px;
+	}
+
+	.total-summary-cards {
+		grid-template-columns: 1fr;
+		gap: 15px;
+	}
+
+	/* Category Cards */
+	.category-card-new {
+		padding: 15px;
+	}
+
+	.category-card-new .card-header-new {
+		font-size: 16px;
+	}
+
+	.category-card-new .card-value-new {
+		font-size: 28px;
+	}
+
+	.category-card-new .card-stats-new {
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.category-card-new .card-detail-item {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
+	}
+
+	.category-card-new .detail-stats {
+		align-self: flex-end;
+	}
+
+	/* Top Suppliers */
+	.top-suppliers-section {
+		padding: 15px;
+	}
+
+	.top-supplier-item {
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 12px;
+	}
+
+	.supplier-rank {
+		font-size: 20px;
 	}
 
 	.supplier-stats {
 		flex-direction: column;
 		gap: 8px;
+	}
+
+	.supplier-name {
+		font-size: 14px;
+	}
+
+	/* Currency Breakdown */
+	.currency-breakdown {
+		font-size: 13px;
+	}
+
+	.exchange-rates {
+		flex-direction: column;
+		gap: 8px;
+		font-size: 12px;
+	}
+}
+
+/* Extra Small Screens */
+@media (max-width: 480px) {
+	.header-text h1 {
+		font-size: 18px;
+	}
+
+	.category-card-new .card-value-new {
+		font-size: 24px;
+	}
+
+	.total-card .value {
+		font-size: 18px !important;
 	}
 }

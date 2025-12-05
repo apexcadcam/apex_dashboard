@@ -17,11 +17,8 @@ class SuppliersDashboard {
 
 		const TEMPLATE = `
 		<div class="suppliers-dashboard-container dashboard-template">
-			<div class="dashboard-header">
+			<div class="dashboard-header" style="margin-top: 10px;">
 				<div class="header-content">
-					<button class="btn-glass" id="back-btn">
-						<i class="fa fa-arrow-left"></i> Hub
-					</button>
 					<div class="header-text">
 						<h1>Suppliers Overview</h1>
 						<p class="subtitle">Track your supplier performance and payables</p>
@@ -32,9 +29,6 @@ class SuppliersDashboard {
 						<span class="label" style="font-size: 12px; color: #9ca3af; display: block;">Total Payables</span>
 						<span class="value" id="header-total-payables" style="font-size: 20px; font-weight: bold;">Loading...</span>
 					</div>
-					<button class="btn-glass" id="refresh-btn">
-						<i class="fa fa-refresh"></i>
-					</button>
 				</div>
 			</div>
 
@@ -61,16 +55,84 @@ class SuppliersDashboard {
 
 		this.format_currency = this.format_currency.bind(this);
 		this.setup_filters();
+		this.add_custom_buttons_to_filters();
 		this.bind_events();
 		this.load_data();
 	}
 
-	bind_events() {
-		this.wrapper.find('#back-btn').on('click', () => {
-			frappe.set_route('apex_dashboards');
-		});
+	add_custom_buttons_to_filters() {
+		// Wait for Frappe to render the filters
+		setTimeout(() => {
+			// Find the filter container (where Company and Period are)
+			const filterContainer = this.page.wrapper.find('.page-form .clearfix, .page-form').first();
+			
+			if (filterContainer.length) {
+				// Create Hub button
+				const hubBtn = $(`
+					<div class="form-group" style="display: inline-block; margin: 0 5px 0 0; min-width: 60px;">
+						<button class="btn btn-default btn-sm" id="hub-btn-custom" style="padding: 5px 10px; font-size: 12px;">
+							<i class="fa fa-arrow-left"></i> Hub
+						</button>
+					</div>
+				`);
+				
+				// Create Refresh button
+				const refreshBtn = $(`
+					<div class="form-group" style="display: inline-block; margin: 0 5px 0 0; min-width: 40px;">
+						<button class="btn btn-default btn-sm" id="refresh-btn-custom" style="padding: 5px 10px; font-size: 12px;">
+							<i class="fa fa-refresh"></i>
+						</button>
+					</div>
+				`);
+				
+				// Add click handlers
+				hubBtn.find('button').on('click', () => frappe.set_route('apex_dashboards'));
+				refreshBtn.find('button').on('click', () => this.load_data());
+				
+				// Insert at the beginning
+				filterContainer.prepend(refreshBtn);
+				filterContainer.prepend(hubBtn);
+				
+				// Make container tighter and left-aligned
+				filterContainer.css({
+					'display': 'flex',
+					'justify-content': 'flex-start',
+					'align-items': 'center',
+					'gap': '3px',
+					'flex-wrap': 'nowrap'
+				});
+				
+				// Make sure everything is inline and smaller
+				filterContainer.find('.form-group').each(function() {
+					const $this = $(this);
+					$this.css({
+						'display': 'inline-block',
+						'vertical-align': 'middle',
+						'margin': '0 3px 0 0',
+						'max-width': '120px'
+					});
+					
+					// Make Company and Period inputs smaller
+					$this.find('input, select').css({
+						'max-width': '100px',
+						'font-size': '12px',
+						'padding': '5px 8px'
+					});
+				});
+				
+				console.log('✅ Hub and Refresh buttons added to filter bar');
+			} else {
+				console.error('❌ Could not find filter container');
+			}
+		}, 300);
+	}
 
-		this.wrapper.find('#refresh-btn').on('click', () => {
+	bind_events() {
+		// Old buttons in HTML template are removed
+		// New buttons are added via add_custom_buttons_to_filters()
+		
+		// Keep other event handlers
+		this.wrapper.on('click', '.btn-link-refresh', () => {
 			this.load_data();
 		});
 	}
