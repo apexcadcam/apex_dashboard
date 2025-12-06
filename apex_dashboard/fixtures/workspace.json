@@ -1,0 +1,115 @@
+[
+ {
+  "charts": [],
+  "content": "[{\"id\":\"m747A4Ub1R\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Apex Dashboards Hub</span>\",\"col\":12}},{\"id\":\"sPu2JhmkZd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Apex Dashboards\",\"col\":3}},{\"id\":\"kyOsojvkN4\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"User Profile Banner\",\"col\":12}},{\"id\":\"1VvJRuie7A\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Egypt Clock Analog\",\"col\":3}},{\"id\":\"eC3cHkZn0m\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Dashboard Notes\",\"col\":9}},{\"id\":\"L9OyH4CHu8\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"China Clock\",\"col\":6}},{\"id\":\"0Fqi4fCi47\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Germany Clock Digital\",\"col\":6}},{\"id\":\"i8xxFw959J\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Dashboard Holidays\",\"col\":12}},{\"id\":\"EfWj8IRDGf\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Egypt Weather Widget\",\"col\":12}}]",
+  "custom_blocks": [
+   {
+    "custom_block_name": "User Profile Banner",
+    "label": "User Profile Banner",
+    "parent": "Apex Dashboards Hub",
+    "parentfield": "custom_blocks",
+    "parenttype": "Workspace"
+   },
+   {
+    "custom_block_name": "Egypt Clock Analog",
+    "label": "Egypt Clock Analog",
+    "parent": "Apex Dashboards Hub",
+    "parentfield": "custom_blocks",
+    "parenttype": "Workspace"
+   },
+   {
+    "custom_block_name": "Dashboard Holidays",
+    "label": "Dashboard Holidays",
+    "parent": "Apex Dashboards Hub",
+    "parentfield": "custom_blocks",
+    "parenttype": "Workspace"
+   },
+   {
+    "custom_block_name": "Dashboard Notes",
+    "label": "Dashboard Notes",
+    "parent": "Apex Dashboards Hub",
+    "parentfield": "custom_blocks",
+    "parenttype": "Workspace"
+   },
+   {
+    "custom_block_name": "Germany Clock Digital",
+    "label": "Germany Clock Digital",
+    "parent": "Apex Dashboards Hub",
+    "parentfield": "custom_blocks",
+    "parenttype": "Workspace"
+   },
+   {
+    "custom_block_name": "China Clock Digital",
+    "label": "China Clock",
+    "parent": "Apex Dashboards Hub",
+    "parentfield": "custom_blocks",
+    "parenttype": "Workspace"
+   },
+   {
+    "custom_block_name": "Egypt Weather Widget",
+    "label": "Egypt Weather Widget",
+    "parent": "Apex Dashboards Hub",
+    "parentfield": "custom_blocks",
+    "parenttype": "Workspace"
+   }
+  ],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "for_user": null,
+  "hide_custom": 0,
+  "icon": "dashboard",
+  "indicator_color": "green",
+  "is_hidden": 0,
+  "label": "Apex Dashboards Hub",
+  "links": [
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Apex Dashboards",
+    "link_count": 0,
+    "link_to": "apex_dashboards",
+    "link_type": "Page",
+    "onboard": 0,
+    "only_for": null,
+    "parent": "Apex Dashboards Hub",
+    "parentfield": "links",
+    "parenttype": "Workspace",
+    "report_ref_doctype": null,
+    "type": "Link"
+   }
+  ],
+  "modified": "2025-12-03 23:40:17.393814",
+  "module": "Apex Dashboard",
+  "name": "Apex Dashboards Hub",
+  "number_cards": [],
+  "parent_page": null,
+  "public": 1,
+  "quick_lists": [],
+  "restrict_to_domain": null,
+  "roles": [],
+  "sequence_id": 0.0,
+  "shortcuts": [
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Apex Dashboards",
+    "link_to": "apex_dashboards",
+    "parent": "Apex Dashboards Hub",
+    "parentfield": "shortcuts",
+    "parenttype": "Workspace",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Page",
+    "url": null
+   }
+  ],
+  "title": "Apex Dashboards Hub"
+ }
+]
