@@ -107,3 +107,18 @@ dmypy.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Backup files
+*.backup
+*.bak
+*.old
+
+# Debug/Test files in root
+DEBUG_*.js
+TEST_*.js
+*_debug.*
+*_test.*
+
+# Solution/README files (if not needed in production)
+# SOLUTION_AR.md
+# TROUBLESHOOTING_AR.md

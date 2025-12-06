@@ -83,7 +83,6 @@ app_include_css = ["/assets/apex_dashboard/css/glass_apple.css"]
 # ------------
 
 after_install = "apex_dashboard.install.after_install"
-after_migrate = ["apex_dashboard.install.after_migrate"]
 
 # Uninstallation
 # ------------
