@@ -187,6 +187,7 @@ def get_dashboard_data(company=None, period="Today", from_date=None, to_date=Non
 def get_exchange_rates(api_key):
 	"""
 	Fetches exchange rates from OpenExchangeRates or cache.
+	Falls back to ERPNext Currency Exchange if API fails or is not configured.
 	"""
 	cache_key = "liquidity_dashboard_rates"
 	cached_rates = frappe.cache().get_value(cache_key)
@@ -195,17 +196,20 @@ def get_exchange_rates(api_key):
 		return cached_rates
 		
 	if not api_key:
+		# No API key, use ERPNext rates immediately
 		return get_erpnext_rates()
 
 	try:
 		url = f"https://openexchangerates.org/api/latest.json?app_id={api_key}&base=USD"
-		response = requests.get(url, timeout=5)
+		# Increased timeout to 10 seconds and added connection timeout
+		response = requests.get(url, timeout=(3, 10))  # (connect timeout, read timeout)
 		response.raise_for_status()
 		data = response.json()
 		
 		# Convert to EGP base
-		if "EGP" not in data["rates"]:
-			 return get_erpnext_rates()
+		if "EGP" not in data.get("rates", {}):
+			frappe.log_error("OpenExchangeRates: EGP not found in rates", "Liquidity Dashboard")
+			return get_erpnext_rates()
 
 		usd_to_egp = data["rates"]["EGP"]
 		rates = {}
@@ -220,10 +224,20 @@ def get_exchange_rates(api_key):
 				else:
 					rates[currency] = 0.0
 					
-		frappe.cache().set_value(cache_key, rates, expires_in_sec=3600) # Cache for 1 hour
+		# Cache for 1 hour
+		frappe.cache().set_value(cache_key, rates, expires_in_sec=3600)
 		return rates
+	except requests.exceptions.Timeout:
+		# Timeout - fallback immediately to avoid long waits
+		frappe.log_error("OpenExchangeRates: Request timeout - using ERPNext rates", "Liquidity Dashboard")
+		return get_erpnext_rates()
+	except requests.exceptions.RequestException as e:
+		# Network errors - fallback immediately
+		frappe.log_error(f"OpenExchangeRates: Network error - {str(e)}", "Liquidity Dashboard")
+		return get_erpnext_rates()
 	except Exception as e:
-		frappe.log_error(f"OpenExchangeRates Error: {str(e)}")
+		# Other errors
+		frappe.log_error(f"OpenExchangeRates Error: {str(e)}", "Liquidity Dashboard")
 		return get_erpnext_rates()
 
 def get_erpnext_rates():
