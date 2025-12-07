@@ -57,8 +57,8 @@ def get_dashboard_data(company=None, period="Today", from_date=None, to_date=Non
 			period = "Today"
 		from_date, to_date = get_period_dates(period)
 	
-	# 1. Get API Key from site config
-	api_key = frappe.conf.get("openexchangerates_api_key")
+	# 1. Get API Key from site config or use default
+	api_key = frappe.conf.get("openexchangerates_api_key") or "39167a07fcc74a86be7f6b6677bc25e4"
 	
 	# 2. Get Rates
 	rates = get_exchange_rates(api_key)

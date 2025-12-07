@@ -7,8 +7,8 @@ def get_exchange_rates():
 	"""
 	Fetches exchange rates from OpenExchangeRates API (same as Liquidity/Suppliers Dashboard).
 	"""
-	# Get API key from site config
-	api_key = frappe.conf.get("openexchangerates_api_key")
+	# Get API key from site config or use default
+	api_key = frappe.conf.get("openexchangerates_api_key") or "39167a07fcc74a86be7f6b6677bc25e4"
 	
 	# Check cache first
 	cache_key = "profitability_dashboard_rates"
