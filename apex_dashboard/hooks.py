@@ -279,12 +279,14 @@ fixtures = [
 		"dt": "Custom HTML Block",
 		"filters": [
 			["name", "in", [
-				"Dashboard Profile Banner",
-				"Dashboard Clock Egypt",
-				"Dashboard Clock China",
-				"Dashboard Clock Germany",
+				"User Profile Banner",
+				"Egypt Clock Analog",
+				"China Clock Analog",
+				"China Clock Digital",
+				"Germany Clock Digital",
 				"Dashboard Holidays",
-				"Dashboard Notes"
+				"Dashboard Notes",
+				"Egypt Weather Widget"
 			]]
 		]
 	},
@@ -294,5 +296,38 @@ fixtures = [
 			["name", "=", "Apex Dashboards Hub"]
 		]
 	}
+	# Uncomment and configure if you add these customizations in the future:
+	# {
+	# 	"dt": "Property Setter",
+	# 	"filters": [
+	# 		["module", "=", "Apex Dashboard"]
+	# 	],
+	# },
+	# {
+	# 	"dt": "Client Script",
+	# 	"filters": [
+	# 		["module", "=", "Apex Dashboard"]
+	# 	],
+	# },
+	# {
+	# 	"dt": "Server Script",
+	# 	"filters": [
+	# 		["module", "=", "Apex Dashboard"]
+	# 	],
+	# },
+	# {
+	# 	"dt": "Print Format",
+	# 	"filters": [
+	# 		["module", "=", "Apex Dashboard"],
+	# 		["standard", "=", "No"]
+	# 	],
+	# },
+	# {
+	# 	"dt": "Report",
+	# 	"filters": [
+	# 		["module", "=", "Apex Dashboard"],
+	# 		["is_standard", "=", 0]
+	# 	],
+	# },
 ]
 

@@ -236,3 +236,4 @@ apex_dashboard/
 - [Custom Fields Guide](https://frappeframework.com/docs/user/en/customize/custom-fields)
 - [Workspace Customization](https://frappeframework.com/docs/user/en/workspace)
 
+
