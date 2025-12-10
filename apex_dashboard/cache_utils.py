@@ -45,8 +45,14 @@ def clear_dashboard_cache(dashboard_type=None, user=None):
         # Clear all dashboards for all users
         clear_all_dashboard_caches()
 
-def clear_all_dashboard_caches():
-    """Clear all dashboard caches"""
+def clear_all_dashboard_caches(doc=None, method=None):
+    """
+    Clear all dashboard caches
+    This function can be used as a hook (on_submit, on_cancel, etc.)
+    Args:
+        doc: Document object (passed by Frappe hooks, not used)
+        method: Method name (passed by Frappe hooks, not used)
+    """
     dashboards = [
         'liquidity', 'expense', 'equity', 'tax',
         'inventory', 'sales', 'crm', 'suppliers', 'test'
